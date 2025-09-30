@@ -10,9 +10,13 @@ import {
   ToastContainer,
   SaveModal,
 } from "./components/index.js";
+import SendPdfModal from "./components/SendPdfModal.jsx";
+import { generateReference, calculatePrice } from "./utils/calculations.js";
 
 function App() {
   const [showPresetModal, setShowPresetModal] = useState(false);
+  const [showSendPdfModal, setShowSendPdfModal] = useState(false);
+  const [pdfBlob, setPdfBlob] = useState(null);
 
   const {
     selectedOptions,
@@ -32,6 +36,25 @@ function App() {
     toasts,
     removeToast,
   } = useConfiguration();
+
+  // Fonction pour générer le PDF et ouvrir le modal d'envoi
+  const handleSendPdf = async () => {
+    try {
+      const { generatePdfPreview } = await import("./utils/pdfGenerator.js");
+      const imgData = await generatePdfPreview(selectedOptions);
+
+      // Créer un Blob à partir de l'image (pour l'instant, on utilise l'image)
+      // Dans une vraie implémentation, on générerait le PDF complet
+      const response = await fetch(imgData);
+      const blob = await response.blob();
+
+      setPdfBlob(blob);
+      setShowSendPdfModal(true);
+    } catch (error) {
+      console.error("Erreur lors de la génération du PDF:", error);
+      addToast("Erreur lors de la génération du PDF", "error");
+    }
+  };
 
   return (
     <div className="app">
@@ -61,6 +84,7 @@ function App() {
             selectedOptions={selectedOptions}
             onSaveClick={() => setShowSaveModal(true)}
             savedConfigsCount={savedConfigs.length}
+            onSendPdfClick={handleSendPdf}
           />
           <ContactSection />
         </div>
@@ -87,6 +111,19 @@ function App() {
 
       {/* Notifications toast */}
       <ToastContainer toasts={toasts} removeToast={removeToast} />
+
+      <SendPdfModal
+        isOpen={showSendPdfModal}
+        onClose={() => setShowSendPdfModal(false)}
+        pdfBlob={pdfBlob}
+        configData={{
+          reference: selectedOptions
+            ? generateReference(selectedOptions)
+            : null,
+          price: selectedOptions ? calculatePrice(selectedOptions) : null,
+          ...selectedOptions,
+        }}
+      />
     </div>
   );
 }
