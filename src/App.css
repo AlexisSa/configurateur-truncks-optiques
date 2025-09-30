@@ -704,7 +704,7 @@ body {
 /* Grille de configuration */
 .configuration-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 columns for desktop */
+  grid-template-columns: repeat(3, 1fr); /* 3 columns for desktop */
   gap: 1rem;
   margin-bottom: 3rem;
 }
@@ -815,7 +815,8 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -1293,7 +1294,7 @@ body {
 /* Responsive */
 @media (max-width: 1200px) {
   .configuration-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 0.875rem;
   }
 
@@ -1319,17 +1320,23 @@ body {
   }
 
   /* Ajuster la deuxième ligne sur tablette */
-  .config-item:nth-child(6) {
+  .config-item:nth-child(4) {
     grid-column: 1;
   }
-  .config-item:nth-child(7) {
+  .config-item:nth-child(5) {
     grid-column: 2;
   }
-  .config-item:nth-child(8) {
+  .config-item:nth-child(6) {
     grid-column: 3;
   }
-  .config-item:nth-child(9) {
+  .config-item:nth-child(7) {
     grid-column: 1;
+  }
+  .config-item:nth-child(8) {
+    grid-column: 2;
+  }
+  .config-item:nth-child(9) {
+    grid-column: 3;
   }
 }
 
@@ -1394,6 +1401,8 @@ body {
   }
 
   /* Réinitialiser les positions sur mobile */
+  .config-item:nth-child(4),
+  .config-item:nth-child(5),
   .config-item:nth-child(6),
   .config-item:nth-child(7),
   .config-item:nth-child(8),
