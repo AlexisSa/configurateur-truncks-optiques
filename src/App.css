@@ -227,9 +227,9 @@ body {
   background: var(--surface);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-xl);
-  max-width: 900px;
+  max-width: 1200px;
   width: 100%;
-  max-height: 90vh;
+  max-height: 95vh;
   overflow: hidden;
   animation: modalSlideIn 0.3s ease-out;
 }
@@ -283,9 +283,9 @@ body {
 
 /* Modal de prévisualisation PDF */
 .pdf-preview-modal {
-  max-width: 92vw;
-  max-height: 92vh;
-  width: 1000px;
+  max-width: 95vw;
+  max-height: 95vh;
+  width: 1200px;
 }
 
 .pdf-preview-body {
@@ -580,24 +580,222 @@ body {
   cursor: not-allowed;
 }
 
+/* Formulaire d'envoi PDF dans ContactSection */
+.pdf-send-form {
+  margin-top: 2rem;
+  padding: 2rem;
+  background: var(--surface-hover);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+}
+
+.form-header {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.form-header h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-primary);
+  font-size: 1.25rem;
+}
+
+.form-header p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.contact-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contact-form .form-group label {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+.contact-form .required {
+  color: var(--error);
+}
+
+.contact-form .form-group input,
+.contact-form .form-group textarea {
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+.contact-form .form-group input:focus,
+.contact-form .form-group textarea:focus {
+  outline: none;
+  border-color: var(--highlight);
+  box-shadow: 0 0 0 3px rgba(54, 59, 199, 0.1);
+}
+
+.contact-form .form-group input:disabled,
+.contact-form .form-group textarea:disabled {
+  background: var(--surface-hover);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.contact-form .pdf-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.contact-form .pdf-icon {
+  font-size: 1.5rem;
+}
+
+.contact-form .pdf-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.contact-form .pdf-details strong {
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+.contact-form .pdf-details span {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.contact-form .progress-message {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #e3f2fd;
+  border-radius: var(--radius-md);
+  border: 1px solid #90caf9;
+  color: #1565c0;
+  font-size: 0.875rem;
+}
+
+.contact-form .error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #ffebee;
+  border-radius: var(--radius-md);
+  border: 1px solid #ffcdd2;
+  color: var(--error);
+  font-size: 0.875rem;
+}
+
+.contact-form .spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e3f2fd;
+  border-top: 2px solid #1565c0;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.contact-form .success-message {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.contact-form .success-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.contact-form .success-message h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-primary);
+  font-size: 1.25rem;
+}
+
+.contact-form .success-message p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.contact-form .form-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.contact-form .send-button {
+  padding: 0.75rem 2rem;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  background: var(--highlight);
+  color: white;
+  border-color: var(--highlight);
+}
+
+.contact-form .send-button:hover:not(:disabled) {
+  background: #2d32a8;
+  border-color: #2d32a8;
+}
+
+.contact-form .send-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Responsive */
 @media (max-width: 640px) {
   .modal-content {
     margin: 1rem;
     max-width: none;
   }
-
+  
   .form-row {
     grid-template-columns: 1fr;
   }
-
+  
   .form-actions {
     flex-direction: column;
   }
-
+  
   .cancel-button,
   .send-button {
     width: 100%;
+  }
+
+  .contact-form .form-row {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1511,9 +1709,9 @@ body {
 
 /* Modal de sauvegarde moderne avec onglets */
 .save-modal {
-  max-width: 1000px;
-  max-height: 90vh;
-  width: 90vw;
+  max-width: 1200px;
+  max-height: 95vh;
+  width: 95vw;
 }
 
 /* Onglets */
