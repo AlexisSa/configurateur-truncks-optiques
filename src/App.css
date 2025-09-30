@@ -931,8 +931,8 @@ body {
 }
 
 .unit-price-item .result-label {
-  color: var(--text-secondary);
-  font-size: 0.75rem;
+  color: var(--text-primary);
+  font-size: 0.875rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
@@ -945,12 +945,12 @@ body {
   background: var(--surface-hover);
   color: var(--text-primary);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  padding: 0.875rem 1rem;
   font-weight: 600;
   font-size: 0.875rem;
   text-align: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
 }
 
 /* Box quantité - harmonisé avec le style des autres éléments */
@@ -961,9 +961,9 @@ body {
 .quantity-box {
   background: var(--surface-hover);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 0.75rem 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-md);
+  padding: 0.875rem 1rem;
+  transition: all 0.2s ease;
 }
 
 .quantity-header {
@@ -978,9 +978,9 @@ body {
 }
 
 .quantity-title {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--text-primary);
 }
 
 .quantity-content {
@@ -988,9 +988,9 @@ body {
 }
 
 .quantity-value {
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 700;
-  color: var(--highlight);
+  color: var(--text-primary);
   margin-bottom: 0.25rem;
 }
 
