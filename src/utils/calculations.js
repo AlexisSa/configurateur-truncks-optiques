@@ -182,7 +182,7 @@ export const getPriceBreakdown = (selectedOptions) => {
             laborTotal +
             resheathingTotal +
             testTotal) *
-          0.5,
+          1.0, // Marge de 50% = coût * 1.0 (car prix final = coût / 0.5)
         description: "Marge commerciale (50%)",
       },
       quantity: {
@@ -190,12 +190,12 @@ export const getPriceBreakdown = (selectedOptions) => {
         description: "Quantité",
       },
       total:
-        (cableTotal +
+        ((cableTotal +
           connectorTotal +
           laborTotal +
           resheathingTotal +
-          testTotal) *
-        1.5 *
+          testTotal) /
+          0.5) *
         (parseInt(selectedOptions.quantite) || 1),
     };
   } catch (error) {
@@ -278,8 +278,8 @@ export const calculatePrice = (selectedOptions) => {
     const totalPrice =
       cableTotal + connectorTotal + laborTotal + resheathingTotal + testTotal;
 
-    // Application de la marge de 50%
-    const priceWithMargin = totalPrice * 1.5;
+    // Application de la marge de 50% (diviser par 0.5 = multiplier par 2)
+    const priceWithMargin = totalPrice / 0.5;
 
     // Application de la quantité
     const quantity = parseInt(selectedOptions.quantite) || 1;

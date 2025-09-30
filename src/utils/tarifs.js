@@ -78,17 +78,17 @@ export const TARIFS = {
         48: null,
       },
       "Multimode OM4": {
-        4: 1.37,
-        6: 1.28,
+        4: 1.28,
+        6: 1.37,
         12: 2.19,
         24: 5.94,
         48: null,
       },
       "Multimode OM5": {
-        4: 1.37,
-        6: 1.28,
-        12: 2.19,
-        24: 5.94,
+        4: null,
+        6: null,
+        12: null,
+        24: null,
         48: null,
       },
     },
@@ -130,11 +130,11 @@ export const TARIFS = {
         48: null,
       },
       "Multimode OM5": {
-        4: 0.8,
-        6: 1.08,
-        12: 1.63,
-        24: 2.84,
-        48: null,
+        4: null, // Pas disponible
+        6: null, // Pas disponible
+        12: null, // Pas disponible
+        24: null, // Pas disponible
+        48: null, // Pas disponible
       },
     },
     // Câble à structure libre 250 µm armé acier anti rongeurs gaine LSZH-anti UV
@@ -175,11 +175,11 @@ export const TARIFS = {
         48: null,
       },
       "Multimode OM5": {
-        4: 1.07,
-        6: 1.2,
-        12: 1.86,
-        24: 3.21,
-        48: null,
+        4: null, // Pas disponible
+        6: null, // Pas disponible
+        12: null, // Pas disponible
+        24: null, // Pas disponible
+        48: null, // Pas disponible
       },
     },
     // Câble à structure libre 250 µm armé acier anti rongeurs gaine PE-anti UV
@@ -220,11 +220,11 @@ export const TARIFS = {
         48: null,
       },
       "Multimode OM5": {
-        4: 1.07,
-        6: 1.2,
-        12: 1.86,
-        24: 3.21,
-        48: null,
+        4: null, // Pas disponible
+        6: null, // Pas disponible
+        12: null, // Pas disponible
+        24: null, // Pas disponible
+        48: null, // Pas disponible
       },
     },
   },
