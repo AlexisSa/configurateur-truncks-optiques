@@ -12,7 +12,6 @@ const ResultsSection = ({
   selectedOptions,
   onSaveClick,
   savedConfigsCount = 0,
-  onSendPdfClick,
 }) => {
   const [showPriceDetail, setShowPriceDetail] = useState(false);
   const [showPdfPreview, setShowPdfPreview] = useState(false);
@@ -226,13 +225,6 @@ const ResultsSection = ({
               title="Exporter en PDF"
             >
               📄 Exporter en PDF
-            </button>
-            <button
-              onClick={onSendPdfClick}
-              className="send-button"
-              title="Envoyer par email"
-            >
-              📧 Envoyer par email
             </button>
           </div>
         </div>

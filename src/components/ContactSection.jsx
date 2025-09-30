@@ -5,7 +5,7 @@ import {
   escapeHtml,
 } from "../utils/compressPdf.js";
 
-const ContactSection = ({ pdfBlob, configData, onSendPdfClick }) => {
+const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
   const [formData, setFormData] = useState({
     nom: "",
     prenom: "",
@@ -29,8 +29,8 @@ const ContactSection = ({ pdfBlob, configData, onSendPdfClick }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!pdfBlob) {
-      setError("Aucun PDF à envoyer");
+    if (!onSendPdfClick) {
+      setError("Fonctionnalité d'envoi non disponible");
       setStatus("error");
       return;
     }
@@ -57,95 +57,29 @@ const ContactSection = ({ pdfBlob, configData, onSendPdfClick }) => {
     }
 
     try {
-      setStatus("compressing");
-      setError("");
-      setProgress("Compression du PDF en cours...");
-
-      // Créer un File à partir du Blob
-      const pdfFile = new File([pdfBlob], "configuration.pdf", {
-        type: "application/pdf",
-      });
-
-      // Vérifier si compression nécessaire
-      let finalPdf = pdfFile;
-      if (pdfFile.size > 4_000_000) {
-        setProgress(
-          "Compression du PDF (cela peut prendre quelques instants)..."
-        );
-        const compressedPdf = await compressPdfBrowser(pdfFile);
-
-        if (!compressedPdf) {
-          setError(
-            "PDF trop volumineux après compression. Veuillez réduire la taille du document."
-          );
-          setStatus("error");
-          return;
-        }
-
-        finalPdf = new File([compressedPdf], "configuration-compressed.pdf", {
-          type: "application/pdf",
-        });
-        setProgress(
-          `PDF compressé: ${
-            Math.round((finalPdf.size / 1024 / 1024) * 100) / 100
-          } MB`
-        );
-      }
-
       setStatus("sending");
-      setProgress("Envoi en cours...");
+      setError("");
+      setProgress("Génération et envoi du PDF en cours...");
 
-      // Convertir le PDF en base64
-      const arrayBuffer = await finalPdf.arrayBuffer();
-      const uint8 = new Uint8Array(arrayBuffer);
-      let binary = "";
-      for (let i = 0; i < uint8.length; i++) binary += String.fromCharCode(uint8[i]);
-      const base64 = btoa(binary);
+      // Déclencher la génération et l'envoi du PDF
+      await onSendPdfClick();
 
-      // Construire le payload JSON
-      const payload = {
-        nom: formData.nom.trim(),
-        prenom: formData.prenom.trim(),
-        email: formData.email.trim(),
-        telephone: formData.telephone.trim(),
-        societe: formData.societe.trim(),
-        message: formData.message.trim(),
-        pdfName: finalPdf.name || "configuration.pdf",
-        pdfType: "application/pdf",
-        pdfBase64: `data:application/pdf;base64,${base64}`,
-        pdfSize: finalPdf.size,
-        configData: configData || null,
-      };
-
-      // Envoyer via l'API (JSON)
-      const response = await fetch("/api/send-pdf", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const result = await response.json();
-
-      if (result.ok) {
-        setStatus("ok");
-        setProgress("PDF envoyé avec succès !");
-        // Réinitialiser le formulaire après 2 secondes
-        setTimeout(() => {
-          setFormData({
-            nom: "",
-            prenom: "",
-            email: "",
-            telephone: "",
-            societe: "",
-            message: "",
-          });
-          setStatus("idle");
-          setProgress("");
-        }, 2000);
-      } else {
-        setError(result.error || "Erreur lors de l'envoi");
-        setStatus("error");
-      }
+      setStatus("ok");
+      setProgress("PDF envoyé avec succès !");
+      
+      // Réinitialiser le formulaire après 2 secondes
+      setTimeout(() => {
+        setFormData({
+          nom: "",
+          prenom: "",
+          email: "",
+          telephone: "",
+          societe: "",
+          message: "",
+        });
+        setStatus("idle");
+        setProgress("");
+      }, 2000);
     } catch (err) {
       console.error("Erreur lors de l'envoi:", err);
       setError("Erreur de connexion. Veuillez réessayer.");
@@ -160,53 +94,50 @@ const ContactSection = ({ pdfBlob, configData, onSendPdfClick }) => {
           <h2>Nous contacter</h2>
         </div>
 
-        <div className="contact-methods">
-          <div className="contact-method">
-            <div className="method-icon phone">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
-              </svg>
+        <div className="contact-content">
+          <div className="contact-methods">
+            <div className="contact-method">
+              <div className="method-icon phone">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+                </svg>
+              </div>
+              <div className="method-content">
+                <h3>Téléphone</h3>
+                <p>03.65.61.04.20</p>
+                <p>02.53.35.60.40</p>
+              </div>
             </div>
-            <div className="method-content">
-              <h3>Téléphone</h3>
-              <p>03.65.61.04.20</p>
-              <p>02.53.35.60.40</p>
+
+            <div className="contact-method">
+              <div className="method-icon email">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                </svg>
+              </div>
+              <div className="method-content">
+                <h3>Email</h3>
+                <p>info.xeilom@xeilom.fr</p>
+              </div>
+            </div>
+
+            <div className="contact-method">
+              <div className="method-icon website">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+                </svg>
+              </div>
+              <div className="method-content">
+                <h3>Site web</h3>
+                <p>xeilom.fr</p>
+              </div>
             </div>
           </div>
 
-          <div className="contact-method">
-            <div className="method-icon email">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-              </svg>
-            </div>
-            <div className="method-content">
-              <h3>Email</h3>
-              <p>info.xeilom@xeilom.fr</p>
-            </div>
-          </div>
-
-          <div className="contact-method">
-            <div className="method-icon website">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
-              </svg>
-            </div>
-            <div className="method-content">
-              <h3>Site web</h3>
-              <p>xeilom.fr</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Formulaire d'envoi de PDF */}
-        {pdfBlob && (
-          <div className="pdf-send-form">
-            <div className="form-header">
-              <h3>📧 Envoyer votre configuration par email</h3>
-              <p>Remplissez le formulaire ci-dessous pour nous envoyer votre configuration</p>
-            </div>
-
+          <div className="contact-form-section">
+            <h3>Envoyer votre configuration par email</h3>
+            <p>Remplissez le formulaire ci-dessous pour nous envoyer votre configuration personnalisée.</p>
+            
             {status === "ok" ? (
               <div className="success-message">
                 <div className="success-icon">✅</div>
@@ -312,16 +243,6 @@ const ContactSection = ({ pdfBlob, configData, onSendPdfClick }) => {
                   />
                 </div>
 
-                <div className="pdf-info">
-                  <div className="pdf-icon">📄</div>
-                  <div className="pdf-details">
-                    <strong>Configuration.pdf</strong>
-                    <span>
-                      {Math.round((pdfBlob.size / 1024 / 1024) * 100) / 100} MB
-                    </span>
-                  </div>
-                </div>
-
                 {progress && (
                   <div className="progress-message">
                     <div className="spinner"></div>
@@ -347,13 +268,13 @@ const ContactSection = ({ pdfBlob, configData, onSendPdfClick }) => {
                       ? "Envoi..."
                       : status === "compressing"
                       ? "Compression..."
-                      : "Envoyer le PDF"}
+                      : "📧 Envoyer la configuration"}
                   </button>
                 </div>
               </form>
             )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

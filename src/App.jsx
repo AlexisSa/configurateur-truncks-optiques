@@ -14,7 +14,6 @@ import { generateReference, calculatePrice } from "./utils/calculations.js";
 
 function App() {
   const [showPresetModal, setShowPresetModal] = useState(false);
-  const [pdfBlob, setPdfBlob] = useState(null);
 
   const {
     selectedOptions,
@@ -35,20 +34,59 @@ function App() {
     removeToast,
   } = useConfiguration();
 
-  // Fonction pour générer le PDF et l'afficher dans ContactSection
-  const handleSendPdf = async () => {
+  // Fonction pour générer le PDF et l'envoyer directement
+  const handleSendPdf = async (formData) => {
     try {
       const { generatePdfPreview } = await import("./utils/pdfGenerator.js");
       const imgData = await generatePdfPreview(selectedOptions);
-
-      // Créer un Blob à partir de l'image (pour l'instant, on utilise l'image)
-      // Dans une vraie implémentation, on générerait le PDF complet
+      
+      // Créer un Blob à partir de l'image
       const response = await fetch(imgData);
       const blob = await response.blob();
+      
+      // Convertir le PDF en base64
+      const arrayBuffer = await blob.arrayBuffer();
+      const uint8 = new Uint8Array(arrayBuffer);
+      let binary = "";
+      for (let i = 0; i < uint8.length; i++) binary += String.fromCharCode(uint8[i]);
+      const base64 = btoa(binary);
 
-      setPdfBlob(blob);
+      // Construire le payload JSON
+      const payload = {
+        nom: formData.nom.trim(),
+        prenom: formData.prenom.trim(),
+        email: formData.email.trim(),
+        telephone: formData.telephone.trim(),
+        societe: formData.societe.trim(),
+        message: formData.message.trim(),
+        pdfName: "configuration.pdf",
+        pdfType: "application/pdf",
+        pdfBase64: `data:application/pdf;base64,${base64}`,
+        pdfSize: blob.size,
+        configData: {
+          reference: selectedOptions ? generateReference(selectedOptions) : null,
+          price: selectedOptions ? calculatePrice(selectedOptions) : null,
+          ...selectedOptions,
+        },
+      };
+
+      // Envoyer via l'API (JSON)
+      const response2 = await fetch("/api/send-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response2.json();
+
+      if (!result.ok) {
+        throw new Error(result.error || "Erreur lors de l'envoi");
+      }
+
+      return result;
     } catch (error) {
-      console.error("Erreur lors de la génération du PDF:", error);
+      console.error("Erreur lors de la génération/envoi du PDF:", error);
+      throw error;
     }
   };
 
@@ -80,17 +118,9 @@ function App() {
             selectedOptions={selectedOptions}
             onSaveClick={() => setShowSaveModal(true)}
             savedConfigsCount={savedConfigs.length}
-            onSendPdfClick={handleSendPdf}
           />
           <ContactSection 
-            pdfBlob={pdfBlob}
-            configData={{
-              reference: selectedOptions
-                ? generateReference(selectedOptions)
-                : null,
-              price: selectedOptions ? calculatePrice(selectedOptions) : null,
-              ...selectedOptions,
-            }}
+            selectedOptions={selectedOptions}
             onSendPdfClick={handleSendPdf}
           />
         </div>
@@ -117,6 +147,7 @@ function App() {
 
       {/* Notifications toast */}
       <ToastContainer toasts={toasts} removeToast={removeToast} />
+
     </div>
   );
 }
