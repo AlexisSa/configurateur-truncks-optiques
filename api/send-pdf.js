@@ -45,6 +45,9 @@ export default async function handler(req, res) {
     const telephone = body.telephone?.toString().trim();
     const societe = body.societe?.toString().trim();
     const adresse = (body.adresse || "").toString();
+    const complement = (body.complement || "").toString();
+    const ville = (body.ville || "").toString();
+    const codePostal = (body.codePostal || "").toString();
     const message = (body.message || "").toString();
     const pdfName = (body.pdfName || "configuration.pdf").toString();
     const pdfType = (body.pdfType || "application/pdf").toString();
@@ -121,7 +124,16 @@ export default async function handler(req, res) {
                        <p><strong>Email :</strong> ${escapeHtml(email)}</p>
                        <p><strong>Téléphone :</strong> ${escapeHtml(telephone)}</p>
                        <p><strong>Société :</strong> ${escapeHtml(societe)}</p>
-                       ${adresse ? `<p><strong>Adresse de livraison :</strong> ${escapeHtml(adresse)}</p>` : ""}
+                       ${adresse || ville || codePostal ? `
+                         <p><strong>Adresse de livraison :</strong></p>
+                         <ul style="margin: 5px 0; padding-left: 20px;">
+                           ${adresse ? `<li>${escapeHtml(adresse)}</li>` : ""}
+                           ${complement ? `<li>${escapeHtml(complement)}</li>` : ""}
+                           ${codePostal && ville ? `<li>${escapeHtml(codePostal)} ${escapeHtml(ville)}</li>` : ""}
+                           ${!codePostal && ville ? `<li>${escapeHtml(ville)}</li>` : ""}
+                           ${codePostal && !ville ? `<li>${escapeHtml(codePostal)}</li>` : ""}
+                         </ul>
+                       ` : ""}
                      </div>
 
               ${configInfo}

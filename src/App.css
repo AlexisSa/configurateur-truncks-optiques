@@ -2625,6 +2625,33 @@ body {
   line-height: 1.4;
 }
 
+.address-section {
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  background: var(--surface-hover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.address-section h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.address-section .field-help {
+  margin-bottom: 1rem;
+}
+
+.address-section .form-group {
+  margin-bottom: 1rem;
+}
+
+.address-section .form-group:last-child {
+  margin-bottom: 0;
+}
+
 .contact-form .form-group input,
 .contact-form .form-group textarea {
   padding: 0.75rem;

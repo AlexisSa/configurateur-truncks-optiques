@@ -13,6 +13,9 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
     telephone: "",
     societe: "",
     adresse: "",
+    complement: "",
+    ville: "",
+    codePostal: "",
     message: "",
   });
   const [status, setStatus] = useState("idle"); // idle | compressing | sending | ok | error
@@ -77,6 +80,9 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
           telephone: "",
           societe: "",
           adresse: "",
+          complement: "",
+          ville: "",
+          codePostal: "",
           message: "",
         });
         setStatus("idle");
@@ -232,22 +238,66 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
                   </div>
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="adresse">
-                    Adresse de livraison <span className="optional">(optionnel)</span>
-                  </label>
-                  <textarea
-                    id="adresse"
-                    name="adresse"
-                    value={formData.adresse}
-                    onChange={handleInputChange}
-                    disabled={status === "sending" || status === "compressing"}
-                    placeholder="Rue, Code postal, Ville, Pays..."
-                    rows="3"
-                  />
+                <div className="address-section">
+                  <h4>Adresse de livraison <span className="optional">(optionnel)</span></h4>
                   <small className="field-help">
                     Indiquez votre adresse pour recevoir un devis avec frais de livraison
                   </small>
+                  
+                  <div className="form-group">
+                    <label htmlFor="adresse">Adresse</label>
+                    <input
+                      type="text"
+                      id="adresse"
+                      name="adresse"
+                      value={formData.adresse}
+                      onChange={handleInputChange}
+                      disabled={status === "sending" || status === "compressing"}
+                      placeholder="Numéro et nom de rue"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="complement">Complément d'adresse</label>
+                    <input
+                      type="text"
+                      id="complement"
+                      name="complement"
+                      value={formData.complement}
+                      onChange={handleInputChange}
+                      disabled={status === "sending" || status === "compressing"}
+                      placeholder="Appartement, étage, bâtiment..."
+                    />
+                  </div>
+
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="codePostal">Code postal</label>
+                      <input
+                        type="text"
+                        id="codePostal"
+                        name="codePostal"
+                        value={formData.codePostal}
+                        onChange={handleInputChange}
+                        disabled={status === "sending" || status === "compressing"}
+                        placeholder="75001"
+                        maxLength="5"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="ville">Ville</label>
+                      <input
+                        type="text"
+                        id="ville"
+                        name="ville"
+                        value={formData.ville}
+                        onChange={handleInputChange}
+                        disabled={status === "sending" || status === "compressing"}
+                        placeholder="Paris"
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 <div className="form-group">
