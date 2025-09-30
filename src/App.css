@@ -917,9 +917,17 @@ body {
   box-shadow: 0 2px 4px rgba(220, 38, 38, 0.1);
 }
 
+/* Prix à l'unité et quantité côte à côte */
+.unit-price-quantity-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
 /* Prix à l'unité */
 .unit-price-item {
-  margin-top: 0.5rem;
+  margin-top: 0;
 }
 
 .unit-price-item .result-label {
@@ -946,7 +954,7 @@ body {
 
 /* Box quantité */
 .quantity-section {
-  margin-top: 1rem;
+  margin-top: 0;
 }
 
 .quantity-box {
