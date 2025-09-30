@@ -181,12 +181,20 @@ const ConfigurationGrid = ({
           <input
             aria-label="Quantité"
             type="number"
-            value={selectedOptions.quantite || ""}
+            value={selectedOptions.quantite || "1"}
             onChange={(e) => {
               const value = e.target.value;
-              // Permettre la valeur vide temporairement pour la saisie
-              if (value === "" || (parseInt(value) >= 1 && parseInt(value) <= 999)) {
+              if (value === "") {
+                // Permettre la valeur vide temporairement pour la saisie
                 handleOptionChange("quantite", value);
+              } else {
+                const numValue = parseInt(value);
+                if (numValue >= 1 && numValue <= 999) {
+                  handleOptionChange("quantite", value);
+                } else if (numValue < 1) {
+                  // Forcer à 1 si la valeur est inférieure à 1
+                  handleOptionChange("quantite", "1");
+                }
               }
             }}
             onBlur={(e) => {
