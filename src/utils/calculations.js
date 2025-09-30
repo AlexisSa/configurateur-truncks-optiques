@@ -117,11 +117,11 @@ export const getPriceBreakdown = (selectedOptions) => {
 
     // 3. Coût de regainage
     // Pour Standard PE, Armé Acier PE et Armé Acier LSZH : toujours appliquer le tarif de regainage
-    const forceResheathing = 
+    const forceResheathing =
       selectedOptions.typeCable === "Standard PE" ||
       selectedOptions.typeCable === "Armé Acier PE" ||
       selectedOptions.typeCable === "Armé Acier LSZH";
-    
+
     const resheathingTotal =
       selectedOptions.epanouissement === "Regainé (2,8 mm)" || forceResheathing
         ? resheathingCosts[nombreFibres]
@@ -237,11 +237,11 @@ export const calculatePrice = (selectedOptions) => {
 
     // 3. Coût de regainage
     // Pour Standard PE, Armé Acier PE et Armé Acier LSZH : toujours appliquer le tarif de regainage
-    const forceResheathing = 
+    const forceResheathing =
       selectedOptions.typeCable === "Standard PE" ||
       selectedOptions.typeCable === "Armé Acier PE" ||
       selectedOptions.typeCable === "Armé Acier LSZH";
-    
+
     const resheathingTotal =
       selectedOptions.epanouissement === "Regainé (2,8 mm)" || forceResheathing
         ? resheathingCosts[nombreFibres]

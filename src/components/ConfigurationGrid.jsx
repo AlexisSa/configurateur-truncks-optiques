@@ -163,15 +163,52 @@ const ConfigurationGrid = ({
         label="Quantité"
         state={getFieldState("quantite")}
       >
-        <input
-          aria-label="Quantité"
-          type="number"
-          value={selectedOptions.quantite || "1"}
-          onChange={(e) => handleOptionChange("quantite", e.target.value)}
-          placeholder="Nombre d'unités"
-          min="1"
-          step="1"
-        />
+        <div className="quantity-selector">
+          <button
+            type="button"
+            className="quantity-btn quantity-minus"
+            onClick={() => {
+              const currentValue = parseInt(selectedOptions.quantite) || 1;
+              if (currentValue > 1) {
+                handleOptionChange("quantite", (currentValue - 1).toString());
+              }
+            }}
+            disabled={parseInt(selectedOptions.quantite) || 1 <= 1}
+            aria-label="Diminuer la quantité"
+          >
+            −
+          </button>
+          <input
+            aria-label="Quantité"
+            type="number"
+            value={selectedOptions.quantite || "1"}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value === "" || (parseInt(value) >= 1 && parseInt(value) <= 999)) {
+                handleOptionChange("quantite", value);
+              }
+            }}
+            placeholder="1"
+            min="1"
+            max="999"
+            step="1"
+            className="quantity-input"
+          />
+          <button
+            type="button"
+            className="quantity-btn quantity-plus"
+            onClick={() => {
+              const currentValue = parseInt(selectedOptions.quantite) || 1;
+              if (currentValue < 999) {
+                handleOptionChange("quantite", (currentValue + 1).toString());
+              }
+            }}
+            disabled={parseInt(selectedOptions.quantite) || 1 >= 999}
+            aria-label="Augmenter la quantité"
+          >
+            +
+          </button>
+        </div>
       </ConfigurationItem>
     </div>
   );
