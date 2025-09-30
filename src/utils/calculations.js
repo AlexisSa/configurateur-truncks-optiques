@@ -97,6 +97,8 @@ export const getPriceBreakdown = (selectedOptions) => {
   // Coût des tests
   const testCosts = TARIFS.testCosts;
 
+  // Frais de port
+  const shippingCost = TARIFS.shippingCost;
 
   try {
     // 1. Prix du câble par mètre linéaire
@@ -123,6 +125,9 @@ export const getPriceBreakdown = (selectedOptions) => {
         ? testCosts[selectedOptions.typeTest][nombreFibres]
         : testCosts[selectedOptions.typeTest];
 
+    // 5. Frais de port
+    const shippingTotal = shippingCost;
+
     return {
       cable: {
         pricePerMeter: cablePricePerMeter,
@@ -141,15 +146,20 @@ export const getPriceBreakdown = (selectedOptions) => {
         total: testTotal,
         description: `Test ${selectedOptions.typeTest}`,
       },
+      shipping: {
+        total: shippingTotal,
+        description: 'Frais de port',
+      },
       subtotal:
-        cableTotal + laborTotal + resheathingTotal + testTotal,
+        cableTotal + laborTotal + resheathingTotal + testTotal + shippingTotal,
       margin: {
         percentage: 50,
         amount:
           (cableTotal +
             laborTotal +
             resheathingTotal +
-            testTotal) *
+            testTotal +
+            shippingTotal) *
           1.0, // Marge de 50% = coût * 1.0 (car prix final = coût / 0.5)
         description: "Marge commerciale (50%)",
       },
@@ -161,7 +171,8 @@ export const getPriceBreakdown = (selectedOptions) => {
         ((cableTotal +
           laborTotal +
           resheathingTotal +
-          testTotal) /
+          testTotal +
+          shippingTotal) /
           0.5) *
         (parseInt(selectedOptions.quantite) || 1),
     };
@@ -191,6 +202,8 @@ export const calculatePrice = (selectedOptions) => {
   // Coût des tests
   const testCosts = TARIFS.testCosts;
 
+  // Frais de port
+  const shippingCost = TARIFS.shippingCost;
 
   try {
     // 1. Prix du câble par mètre linéaire
@@ -222,9 +235,12 @@ export const calculatePrice = (selectedOptions) => {
         ? testCosts[selectedOptions.typeTest][nombreFibres]
         : testCosts[selectedOptions.typeTest];
 
+    // 5. Frais de port
+    const shippingTotal = shippingCost;
+
     // Calcul du prix total
     const totalPrice =
-      cableTotal + laborTotal + resheathingTotal + testTotal;
+      cableTotal + laborTotal + resheathingTotal + testTotal + shippingTotal;
 
     // Application de la marge de 50% (diviser par 0.5 = multiplier par 2)
     const priceWithMargin = totalPrice / 0.5;

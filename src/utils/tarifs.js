@@ -269,4 +269,7 @@ export const TARIFS = {
       48: 96.0,
     },
   },
+
+  // Frais de port fixes
+  shippingCost: 20.0,
 };
