@@ -39,16 +39,17 @@ function App() {
     try {
       const { generatePdfPreview } = await import("./utils/pdfGenerator.js");
       const imgData = await generatePdfPreview(selectedOptions);
-      
+
       // Créer un Blob à partir de l'image
       const response = await fetch(imgData);
       const blob = await response.blob();
-      
+
       // Convertir le PDF en base64
       const arrayBuffer = await blob.arrayBuffer();
       const uint8 = new Uint8Array(arrayBuffer);
       let binary = "";
-      for (let i = 0; i < uint8.length; i++) binary += String.fromCharCode(uint8[i]);
+      for (let i = 0; i < uint8.length; i++)
+        binary += String.fromCharCode(uint8[i]);
       const base64 = btoa(binary);
 
       // Construire le payload JSON
@@ -64,7 +65,9 @@ function App() {
         pdfBase64: `data:application/pdf;base64,${base64}`,
         pdfSize: blob.size,
         configData: {
-          reference: selectedOptions ? generateReference(selectedOptions) : null,
+          reference: selectedOptions
+            ? generateReference(selectedOptions)
+            : null,
           price: selectedOptions ? calculatePrice(selectedOptions) : null,
           ...selectedOptions,
         },
@@ -119,7 +122,7 @@ function App() {
             onSaveClick={() => setShowSaveModal(true)}
             savedConfigsCount={savedConfigs.length}
           />
-          <ContactSection 
+          <ContactSection
             selectedOptions={selectedOptions}
             onSendPdfClick={handleSendPdf}
           />
@@ -147,7 +150,6 @@ function App() {
 
       {/* Notifications toast */}
       <ToastContainer toasts={toasts} removeToast={removeToast} />
-
     </div>
   );
 }

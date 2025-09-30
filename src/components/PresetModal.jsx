@@ -8,13 +8,20 @@ const PresetModal = ({
   if (!showPresetModal) return null;
 
   return (
-    <div className="modal-overlay" onClick={() => setShowPresetModal(false)}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="modal-overlay"
+      onClick={() => setShowPresetModal(false)}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="preset-modal-title"
+    >
+      <div className="modal-content preset-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h3>Configurations pré-faites</h3>
+          <h3 id="preset-modal-title">Configurations pré-faites</h3>
           <button
             className="modal-close"
             onClick={() => setShowPresetModal(false)}
+            aria-label="Fermer"
           >
             ✕
           </button>
