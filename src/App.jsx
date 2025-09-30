@@ -118,7 +118,7 @@ function App() {
               getFieldState={getFieldState}
             />
           </div>
-          
+
           <div className="configuration-right">
             <ResultsSection
               selectedOptions={selectedOptions}
