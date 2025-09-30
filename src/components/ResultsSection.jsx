@@ -105,7 +105,7 @@ const ResultsSection = ({
           <div className="unit-price-quantity-row">
             <div className="result-item unit-price-item">
               <div className="result-label">
-                <span className="label-icon">📦</span>
+                <span className="label-icon">💰</span>
                 <span>Prix à l'unité</span>
               </div>
               <div className="result-value unit-price">
@@ -116,7 +116,7 @@ const ResultsSection = ({
             <div className="quantity-section">
               <div className="quantity-box">
                 <div className="quantity-header">
-                  <span className="quantity-icon">🔢</span>
+                  <span className="quantity-icon">📦</span>
                   <span className="quantity-title">Quantité</span>
                 </div>
                 <div className="quantity-content">
