@@ -173,7 +173,7 @@ const ConfigurationGrid = ({
                 handleOptionChange("quantite", (currentValue - 1).toString());
               }
             }}
-            disabled={parseInt(selectedOptions.quantite) || 1 <= 1}
+            disabled={(parseInt(selectedOptions.quantite) || 1) <= 1}
             aria-label="Diminuer la quantité"
           >
             −
@@ -203,7 +203,7 @@ const ConfigurationGrid = ({
                 handleOptionChange("quantite", (currentValue + 1).toString());
               }
             }}
-            disabled={parseInt(selectedOptions.quantite) || 1 >= 999}
+            disabled={(parseInt(selectedOptions.quantite) || 1) >= 999}
             aria-label="Augmenter la quantité"
           >
             +
