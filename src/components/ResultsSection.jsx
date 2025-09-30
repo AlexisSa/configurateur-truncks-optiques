@@ -71,7 +71,7 @@ const ResultsSection = ({
         <div className="result-item">
           <div className="result-label">
             <span className="label-icon">💰</span>
-            <span>Prix d'achat</span>
+            <span>Prix public</span>
           </div>
           <div className="price-container">
             <div

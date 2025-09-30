@@ -54,7 +54,7 @@ export const generatePdfPreview = async (selectedOptions) => {
         </div>
         
         <div style="background: #f8f9fa; padding: 8px; border-radius: 4px; border-left: 2px solid #363bc7;">
-          <h3 style="margin: 0 0 3px 0; color: #333; font-size: 9px;">💰 Prix d'achat</h3>
+          <h3 style="margin: 0 0 3px 0; color: #333; font-size: 9px;">💰 Prix public</h3>
           <p style="margin: 0; font-size: 13px; font-weight: bold; color: #363bc7;">${
             calculatePrice(selectedOptions)
               ? `${calculatePrice(selectedOptions)} €`
@@ -291,7 +291,7 @@ export const exportToPDF = async (selectedOptions) => {
         </div>
         
         <div style="background: #f8f9fa; padding: 8px; border-radius: 4px; border-left: 2px solid #363bc7;">
-          <h3 style="margin: 0 0 3px 0; color: #333; font-size: 9px;">💰 Prix d'achat</h3>
+          <h3 style="margin: 0 0 3px 0; color: #333; font-size: 9px;">💰 Prix public</h3>
           <p style="margin: 0; font-size: 13px; font-weight: bold; color: #363bc7;">${
             calculatePrice(selectedOptions)
               ? `${calculatePrice(selectedOptions)} €`
