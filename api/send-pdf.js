@@ -2,106 +2,92 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-/**
- * Fonction serverless Vercel pour envoyer un PDF par email
- */
+function escapeHtml(text) {
+  if (!text) return "";
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function readJsonBody(req) {
+  return new Promise((resolve, reject) => {
+    let data = "";
+    req.on("data", (chunk) => {
+      data += chunk;
+      if (data.length > 10 * 1024 * 1024) reject(new Error("Payload trop volumineux"));
+    });
+    req.on("end", () => {
+      try {
+        resolve(data ? JSON.parse(data) : {});
+      } catch (e) {
+        reject(e);
+      }
+    });
+    req.on("error", reject);
+  });
+}
+
+// POST /api/send-pdf
 export default async function handler(req, res) {
-  // Vérifier que c'est une requête POST
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Méthode non autorisée" });
   }
 
   try {
-    // Récupérer les données du formulaire
-    const formData = await req.formData();
+    const body = await readJsonBody(req);
 
-    const nom = formData.get("nom");
-    const prenom = formData.get("prenom");
-    const email = formData.get("email");
-    const telephone = formData.get("telephone");
-    const societe = formData.get("societe");
-    const message = formData.get("message");
-    const pdfFile = formData.get("pdf");
-    const configDataStr = formData.get("configData");
+    const nom = body.nom?.toString().trim();
+    const prenom = body.prenom?.toString().trim();
+    const email = body.email?.toString().trim();
+    const telephone = body.telephone?.toString().trim();
+    const societe = body.societe?.toString().trim();
+    const message = (body.message || "").toString();
+    const pdfName = (body.pdfName || "configuration.pdf").toString();
+    const pdfType = (body.pdfType || "application/pdf").toString();
+    const pdfBase64 = body.pdfBase64?.toString();
+    const pdfSize = Number(body.pdfSize || 0);
+    const configData = body.configData || null;
 
-    // Validation des champs obligatoires
-    if (!nom || !prenom || !email || !telephone || !societe || !pdfFile) {
-      return res.status(400).json({
-        error: "Champs obligatoires manquants",
-      });
+    if (!nom || !prenom || !email || !telephone || !societe || !pdfBase64) {
+      return res.status(400).json({ error: "Champs obligatoires manquants" });
+    }
+    if (pdfType !== "application/pdf") {
+      return res.status(400).json({ error: "Le fichier doit être un PDF" });
     }
 
-    // Validation du fichier PDF
-    if (pdfFile.type !== "application/pdf") {
-      return res.status(400).json({
-        error: "Le fichier doit être un PDF",
-      });
+    const cleanedBase64 = pdfBase64.includes(",") ? pdfBase64.split(",")[1] : pdfBase64;
+    const pdfBuffer = Buffer.from(cleanedBase64, "base64");
+    if (pdfBuffer.length > 4_500_000) {
+      return res.status(400).json({ error: "Fichier trop volumineux (max 4.5MB)" });
     }
 
-    // Vérifier la taille du fichier (4.5MB max par sécurité)
-    const maxSize = 4_500_000; // 4.5MB
-    if (pdfFile.size > maxSize) {
-      return res.status(400).json({
-        error: "Fichier trop volumineux (max 4.5MB)",
-      });
-    }
-
-    // Convertir le fichier en Buffer
-    const arrayBuffer = await pdfFile.arrayBuffer();
-    const pdfBuffer = Buffer.from(arrayBuffer);
-
-    // Préparer les données de configuration si disponibles
     let configInfo = "";
-    if (configDataStr) {
+    if (configData) {
       try {
-        const configData = JSON.parse(configDataStr);
         configInfo = `
           <h3>Détails de la configuration :</h3>
           <ul>
-            <li><strong>Référence :</strong> ${escapeHtml(
-              configData.reference || "N/A"
-            )}</li>
-            <li><strong>Prix :</strong> ${escapeHtml(
-              configData.price || "N/A"
-            )} €</li>
-            <li><strong>Connecteur A :</strong> ${escapeHtml(
-              configData.connecteurA || "N/A"
-            )}</li>
-            <li><strong>Connecteur B :</strong> ${escapeHtml(
-              configData.connecteurB || "N/A"
-            )}</li>
-            <li><strong>Nombre de fibres :</strong> ${escapeHtml(
-              configData.nombreFibres || "N/A"
-            )}</li>
-            <li><strong>Mode fibre :</strong> ${escapeHtml(
-              configData.modeFibre || "N/A"
-            )}</li>
-            <li><strong>Type de câble :</strong> ${escapeHtml(
-              configData.typeCable || "N/A"
-            )}</li>
-            <li><strong>Longueur :</strong> ${escapeHtml(
-              configData.longueur || "N/A"
-            )} m</li>
-            <li><strong>Épanouissement :</strong> ${escapeHtml(
-              configData.epanouissement || "N/A"
-            )}</li>
-            <li><strong>Type de test :</strong> ${escapeHtml(
-              configData.typeTest || "N/A"
-            )}</li>
-            <li><strong>Quantité :</strong> ${escapeHtml(
-              configData.quantite || "1"
-            )}</li>
+            <li><strong>Référence :</strong> ${escapeHtml(configData.reference || "N/A")}</li>
+            <li><strong>Prix :</strong> ${escapeHtml(String(configData.price ?? "N/A"))} €</li>
+            <li><strong>Connecteur A :</strong> ${escapeHtml(configData.connecteurA || "N/A")}</li>
+            <li><strong>Connecteur B :</strong> ${escapeHtml(configData.connecteurB || "N/A")}</li>
+            <li><strong>Nombre de fibres :</strong> ${escapeHtml(String(configData.nombreFibres || "N/A"))}</li>
+            <li><strong>Mode fibre :</strong> ${escapeHtml(configData.modeFibre || "N/A")}</li>
+            <li><strong>Type de câble :</strong> ${escapeHtml(configData.typeCable || "N/A")}</li>
+            <li><strong>Longueur :</strong> ${escapeHtml(String(configData.longueur || "N/A"))} m</li>
+            <li><strong>Épanouissement :</strong> ${escapeHtml(configData.epanouissement || "N/A")}</li>
+            <li><strong>Type de test :</strong> ${escapeHtml(configData.typeTest || "N/A")}</li>
+            <li><strong>Quantité :</strong> ${escapeHtml(String(configData.quantite || "1"))}</li>
           </ul>
         `;
       } catch (err) {
-        console.warn(
-          "Erreur lors du parsing des données de configuration:",
-          err
-        );
+        console.warn("Erreur lors du parsing des données de configuration:", err);
       }
     }
 
-    // Construire le contenu HTML de l'email
     const emailHtml = `
       <!DOCTYPE html>
       <html>
@@ -124,21 +110,13 @@ export default async function handler(req, res) {
           <div class="container">
             <div class="header">
               <h1>🔧 Nouvelle configuration de trunck optique</h1>
-              <p>Reçue le ${new Date().toLocaleDateString("fr-FR", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}</p>
+              <p>Reçue le ${new Date().toLocaleDateString("fr-FR", { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
             </div>
             
             <div class="content">
               <div class="info">
                 <h3>👤 Informations du client :</h3>
-                <p><strong>Nom :</strong> ${escapeHtml(nom)} ${escapeHtml(
-      prenom
-    )}</p>
+                <p><strong>Nom :</strong> ${escapeHtml(nom)} ${escapeHtml(prenom)}</p>
                 <p><strong>Email :</strong> ${escapeHtml(email)}</p>
                 <p><strong>Téléphone :</strong> ${escapeHtml(telephone)}</p>
                 <p><strong>Société :</strong> ${escapeHtml(societe)}</p>
@@ -146,22 +124,16 @@ export default async function handler(req, res) {
 
               ${configInfo}
 
-              ${
-                message
-                  ? `
+              ${message ? `
                 <div class="message">
                   <h3>💬 Message du client :</h3>
                   <p>${escapeHtml(message)}</p>
                 </div>
-              `
-                  : ""
-              }
+              ` : ""}
 
               <div class="info">
                 <h3>📎 Pièce jointe :</h3>
-                <p>Configuration PDF (${
-                  Math.round((pdfFile.size / 1024 / 1024) * 100) / 100
-                } MB)</p>
+                <p>Configuration PDF (${Math.round((pdfSize / 1024 / 1024) * 100) / 100} MB)</p>
               </div>
             </div>
             
@@ -173,18 +145,15 @@ export default async function handler(req, res) {
       </html>
     `;
 
-    // Envoyer l'email via Resend
     const emailData = {
       from: process.env.CONTACT_FROM,
       to: "communication@xeilom.fr",
       reply_to: email,
-      subject: `Nouveau PDF du configurateur — ${escapeHtml(nom)} ${escapeHtml(
-        prenom
-      )}`,
+      subject: `Nouveau PDF du configurateur — ${escapeHtml(nom)} ${escapeHtml(prenom)}`,
       html: emailHtml,
       attachments: [
         {
-          filename: pdfFile.name || "configuration.pdf",
+          filename: pdfName || "configuration.pdf",
           content: pdfBuffer,
           contentType: "application/pdf",
         },
@@ -195,37 +164,12 @@ export default async function handler(req, res) {
 
     if (result.error) {
       console.error("Erreur Resend:", result.error);
-      return res.status(500).json({
-        error: "Erreur lors de l'envoi de l'email",
-      });
+      return res.status(500).json({ error: "Erreur lors de l'envoi de l'email" });
     }
 
-    console.log("Email envoyé avec succès:", result.data?.id);
-
-    return res.status(200).json({
-      ok: true,
-      messageId: result.data?.id,
-    });
+    return res.status(200).json({ ok: true, messageId: result.data?.id });
   } catch (error) {
     console.error("Erreur dans l'API send-pdf:", error);
-    return res.status(500).json({
-      error: "Erreur interne du serveur",
-    });
+    return res.status(500).json({ error: "Erreur interne du serveur" });
   }
-}
-
-/**
- * Échappe les caractères HTML pour la sécurité
- * @param {string} text - Texte à échapper
- * @returns {string} - Texte échappé
- */
-function escapeHtml(text) {
-  if (!text) return "";
-
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
 }

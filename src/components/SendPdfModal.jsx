@@ -95,25 +95,33 @@ const SendPdfModal = ({ isOpen, onClose, pdfBlob, configData }) => {
       setStatus("sending");
       setProgress("Envoi en cours...");
 
-      // Préparer les données pour l'envoi
-      const formDataToSend = new FormData();
-      formDataToSend.append("nom", formData.nom.trim());
-      formDataToSend.append("prenom", formData.prenom.trim());
-      formDataToSend.append("email", formData.email.trim());
-      formDataToSend.append("telephone", formData.telephone.trim());
-      formDataToSend.append("societe", formData.societe.trim());
-      formDataToSend.append("message", formData.message.trim());
-      formDataToSend.append("pdf", finalPdf);
+      // Convertir le PDF en base64
+      const arrayBuffer = await finalPdf.arrayBuffer();
+      const uint8 = new Uint8Array(arrayBuffer);
+      let binary = "";
+      for (let i = 0; i < uint8.length; i++) binary += String.fromCharCode(uint8[i]);
+      const base64 = btoa(binary);
 
-      // Ajouter les données de configuration si disponibles
-      if (configData) {
-        formDataToSend.append("configData", JSON.stringify(configData));
-      }
+      // Construire le payload JSON
+      const payload = {
+        nom: formData.nom.trim(),
+        prenom: formData.prenom.trim(),
+        email: formData.email.trim(),
+        telephone: formData.telephone.trim(),
+        societe: formData.societe.trim(),
+        message: formData.message.trim(),
+        pdfName: finalPdf.name || "configuration.pdf",
+        pdfType: "application/pdf",
+        pdfBase64: `data:application/pdf;base64,${base64}`,
+        pdfSize: finalPdf.size,
+        configData: configData || null,
+      };
 
-      // Envoyer via l'API
+      // Envoyer via l'API (JSON)
       const response = await fetch("/api/send-pdf", {
         method: "POST",
-        body: formDataToSend,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
