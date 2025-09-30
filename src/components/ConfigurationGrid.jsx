@@ -173,7 +173,7 @@ const ConfigurationGrid = ({
                 handleOptionChange("quantite", (currentValue - 1).toString());
               }
             }}
-            disabled={(parseInt(selectedOptions.quantite) || 1) <= 1}
+            disabled={!selectedOptions.quantite || selectedOptions.quantite === "" || (parseInt(selectedOptions.quantite) || 1) <= 1}
             aria-label="Diminuer la quantité"
           >
             −
@@ -184,8 +184,15 @@ const ConfigurationGrid = ({
             value={selectedOptions.quantite || "1"}
             onChange={(e) => {
               const value = e.target.value;
+              // Permettre la valeur vide temporairement pour la saisie
               if (value === "" || (parseInt(value) >= 1 && parseInt(value) <= 999)) {
                 handleOptionChange("quantite", value);
+              }
+            }}
+            onBlur={(e) => {
+              // Si l'input est vide au blur, remettre la valeur par défaut
+              if (e.target.value === "") {
+                handleOptionChange("quantite", "1");
               }
             }}
             placeholder="1"
@@ -203,7 +210,7 @@ const ConfigurationGrid = ({
                 handleOptionChange("quantite", (currentValue + 1).toString());
               }
             }}
-            disabled={(parseInt(selectedOptions.quantite) || 1) >= 999}
+            disabled={!selectedOptions.quantite || selectedOptions.quantite === "" || (parseInt(selectedOptions.quantite) || 1) >= 999}
             aria-label="Augmenter la quantité"
           >
             +
