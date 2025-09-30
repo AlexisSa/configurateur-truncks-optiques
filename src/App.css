@@ -918,47 +918,74 @@ body {
 }
 
 /* Prix à l'unité */
-.unit-price-section {
+.unit-price-item {
+  margin-top: 0.5rem;
+}
+
+.unit-price-item .result-label {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.unit-price-item .label-icon {
+  font-size: 1rem;
+}
+
+.unit-price {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/* Box quantité */
+.quantity-section {
   margin-top: 1rem;
 }
 
-.unit-price-box {
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  border: 1px solid #cbd5e1;
+.quantity-box {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #7dd3fc;
   border-radius: var(--radius-md);
   padding: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(125, 211, 252, 0.2);
 }
 
-.unit-price-header {
+.quantity-header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.75rem;
 }
 
-.unit-price-icon {
+.quantity-icon {
   font-size: 1rem;
 }
 
-.unit-price-title {
+.quantity-title {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-primary);
 }
 
-.unit-price-content {
+.quantity-content {
   text-align: center;
 }
 
-.unit-price-value {
-  font-size: 1.25rem;
+.quantity-value {
+  font-size: 1.5rem;
   font-weight: 700;
-  color: var(--highlight);
+  color: #0369a1;
   margin-bottom: 0.25rem;
 }
 
-.unit-price-quantity {
+.quantity-label {
   font-size: 0.75rem;
   color: var(--text-muted);
   font-weight: 500;

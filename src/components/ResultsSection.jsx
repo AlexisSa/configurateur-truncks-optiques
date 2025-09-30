@@ -102,18 +102,30 @@ const ResultsSection = ({
         </div>
 
         {price && unitPrice && priceBreakdown?.quantity?.value > 1 && (
-          <div className="unit-price-section">
-            <div className="unit-price-box">
-              <div className="unit-price-header">
-                <span className="unit-price-icon">📦</span>
-                <span className="unit-price-title">Prix à l'unité</span>
+          <div className="result-item unit-price-item">
+            <div className="result-label">
+              <span className="label-icon">📦</span>
+              <span>Prix à l'unité</span>
+            </div>
+            <div className="result-value unit-price">
+              {unitPrice.toFixed(2)} €
+            </div>
+          </div>
+        )}
+
+        {price && priceBreakdown?.quantity?.value > 1 && (
+          <div className="quantity-section">
+            <div className="quantity-box">
+              <div className="quantity-header">
+                <span className="quantity-icon">🔢</span>
+                <span className="quantity-title">Quantité</span>
               </div>
-              <div className="unit-price-content">
-                <div className="unit-price-value">
-                  {unitPrice.toFixed(2)} €
+              <div className="quantity-content">
+                <div className="quantity-value">
+                  {priceBreakdown.quantity.value}
                 </div>
-                <div className="unit-price-quantity">
-                  pour {priceBreakdown.quantity.value} produits
+                <div className="quantity-label">
+                  produits
                 </div>
               </div>
             </div>
