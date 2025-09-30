@@ -229,22 +229,23 @@ export const TARIFS = {
     },
   },
 
-
   // Main d'œuvre selon le type de câble et le nombre de fibres
   laborCosts: {
     // Pour Standard LSZH et Renforcé LSZH
-    "standard": {
-      4: 75.48,
-      6: 104.42,
-      12: 178.24,
-      24: 299.41,
+    standard: {
+      4: 59.48,
+      6: 80.42,
+      12: 143.24,
+      24: 229.41,
+      48: 453.82,
     },
     // Pour Standard PE, Armé Acier LSZH et Armé Acier PE
-    "other": {
+    other: {
       4: 75.48,
       6: 104.42,
       12: 178.24,
       24: 299.41,
+      48: 593.82,
     },
   },
 
@@ -268,5 +269,4 @@ export const TARIFS = {
       48: 96.0,
     },
   },
-
 };

@@ -116,26 +116,27 @@ export const getPriceBreakdown = (selectedOptions) => {
 
   try {
     // 1. Prix du câble par mètre linéaire
+    const nombreFibres = parseInt(selectedOptions.nombreFibres);
     const cablePricePerMeter =
       cablePrices[selectedOptions.typeCable]?.[selectedOptions.modeFibre]?.[
-        selectedOptions.nombreFibres
+        nombreFibres
       ];
     const cableTotal =
       cablePricePerMeter * parseFloat(selectedOptions.longueur);
 
     // 2. Main d'œuvre (inclut les connecteurs)
-    const laborTotal = laborCosts[laborType][selectedOptions.nombreFibres];
+    const laborTotal = laborCosts[laborType][nombreFibres];
 
     // 3. Coût de regainage (si épanouissement regainé)
     const resheathingTotal =
       selectedOptions.epanouissement === "Regainé (2,8 mm)"
-        ? resheathingCosts[selectedOptions.nombreFibres]
+        ? resheathingCosts[nombreFibres]
         : 0;
 
     // 4. Coût des tests
     const testTotal =
       selectedOptions.typeTest === "Réflectométrie"
-        ? testCosts[selectedOptions.typeTest][selectedOptions.nombreFibres]
+        ? testCosts[selectedOptions.typeTest][nombreFibres]
         : testCosts[selectedOptions.typeTest];
 
     return {
@@ -209,9 +210,10 @@ export const calculatePrice = (selectedOptions) => {
 
   try {
     // 1. Prix du câble par mètre linéaire
+    const nombreFibres = parseInt(selectedOptions.nombreFibres);
     const cablePricePerMeter =
       cablePrices[selectedOptions.typeCable]?.[selectedOptions.modeFibre]?.[
-        selectedOptions.nombreFibres
+        nombreFibres
       ];
 
     if (cablePricePerMeter === null || cablePricePerMeter === undefined) {
@@ -222,18 +224,18 @@ export const calculatePrice = (selectedOptions) => {
       cablePricePerMeter * parseFloat(selectedOptions.longueur);
 
     // 2. Main d'œuvre (inclut les connecteurs)
-    const laborTotal = laborCosts[laborType][selectedOptions.nombreFibres];
+    const laborTotal = laborCosts[laborType][nombreFibres];
 
     // 3. Coût de regainage (si épanouissement regainé)
     const resheathingTotal =
       selectedOptions.epanouissement === "Regainé (2,8 mm)"
-        ? resheathingCosts[selectedOptions.nombreFibres]
+        ? resheathingCosts[nombreFibres]
         : 0;
 
     // 4. Coût des tests
     const testTotal =
       selectedOptions.typeTest === "Réflectométrie"
-        ? testCosts[selectedOptions.typeTest][selectedOptions.nombreFibres]
+        ? testCosts[selectedOptions.typeTest][nombreFibres]
         : testCosts[selectedOptions.typeTest];
 
     // Calcul du prix total
