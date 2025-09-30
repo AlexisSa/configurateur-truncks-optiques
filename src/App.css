@@ -431,7 +431,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 1.5rem 0 1.5rem;
   border-bottom: 1px solid var(--border);
   margin-bottom: 1.5rem;
 }
@@ -673,6 +672,32 @@ body {
   padding: 3rem 2rem;
   max-width: 1400px;
   margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Layout configuration côte à côte */
+.configuration-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.configuration-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.configuration-right {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Section contact pleine largeur */
+.contact-section-full {
   width: 100%;
 }
 
@@ -2679,6 +2704,10 @@ body {
 
 /* Responsive pour le formulaire de contact */
 @media (max-width: 768px) {
+  .configuration-layout {
+    grid-template-columns: 1fr;
+  }
+  
   .contact-form .form-row {
     grid-template-columns: 1fr;
   }

@@ -107,21 +107,28 @@ function App() {
       </div>
 
       <main className="app-main">
-        <ConfigurationGrid
-          selectedOptions={selectedOptions}
-          handleOptionChange={handleOptionChange}
-          getAvailableFiberModesForCurrentConfig={
-            getAvailableFiberModesForCurrentConfig
-          }
-          getFieldState={getFieldState}
-        />
+        <div className="configuration-layout">
+          <div className="configuration-left">
+            <ConfigurationGrid
+              selectedOptions={selectedOptions}
+              handleOptionChange={handleOptionChange}
+              getAvailableFiberModesForCurrentConfig={
+                getAvailableFiberModesForCurrentConfig
+              }
+              getFieldState={getFieldState}
+            />
+          </div>
+          
+          <div className="configuration-right">
+            <ResultsSection
+              selectedOptions={selectedOptions}
+              onSaveClick={() => setShowSaveModal(true)}
+              savedConfigsCount={savedConfigs.length}
+            />
+          </div>
+        </div>
 
-        <div className="results-section">
-          <ResultsSection
-            selectedOptions={selectedOptions}
-            onSaveClick={() => setShowSaveModal(true)}
-            savedConfigsCount={savedConfigs.length}
-          />
+        <div className="contact-section-full">
           <ContactSection
             selectedOptions={selectedOptions}
             onSendPdfClick={handleSendPdf}
