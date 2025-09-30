@@ -4,6 +4,7 @@ import {
   validatePdfFile,
   escapeHtml,
 } from "../utils/compressPdf.js";
+import { isConfigurationComplete } from "../utils/calculations.js";
 
 const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
   const [formData, setFormData] = useState({
@@ -330,7 +331,7 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
                 <div className="form-actions">
                   <button
                     type="submit"
-                    disabled={status === "sending" || status === "compressing"}
+                    disabled={status === "sending" || status === "compressing" || !isConfigurationComplete(selectedOptions)}
                     className="send-button"
                     aria-busy={status === "sending" || status === "compressing"}
                   >

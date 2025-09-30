@@ -207,6 +207,7 @@ const ResultsSection = ({
               onClick={onSaveClick}
               className="save-config-button"
               title="Sauvegarder cette configuration"
+              disabled={!isConfigurationComplete(selectedOptions)}
             >
               💾 Sauvegarder
               {savedConfigsCount > 0 && (
@@ -217,6 +218,7 @@ const ResultsSection = ({
               onClick={handleGeneratePdfPreview}
               className="preview-button"
               title="Prévisualiser le PDF"
+              disabled={!isConfigurationComplete(selectedOptions)}
             >
               👁️ Prévisualiser
             </button>
@@ -224,6 +226,7 @@ const ResultsSection = ({
               onClick={handleExportToPDF}
               className="export-button"
               title="Exporter en PDF"
+              disabled={!isConfigurationComplete(selectedOptions)}
             >
               📄 Exporter en PDF
             </button>

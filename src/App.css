@@ -953,6 +953,21 @@ body {
   justify-content: center;
 }
 
+.export-buttons button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--surface-hover);
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+.export-buttons button:disabled:hover {
+  background: var(--surface-hover);
+  color: var(--text-muted);
+  transform: none;
+  box-shadow: none;
+}
+
 .save-config-button {
   padding: 0.75rem 1.5rem;
   background: linear-gradient(135deg, var(--highlight) 0%, #2d32a8 100%);
@@ -2681,8 +2696,18 @@ body {
 }
 
 .contact-form .send-button:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
+  background: var(--surface-hover);
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+.contact-form .send-button:disabled:hover {
+  background: var(--surface-hover);
+  color: var(--text-muted);
+  transform: none;
+  box-shadow: none;
 }
 
 /* Messages de statut */
