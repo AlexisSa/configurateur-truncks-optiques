@@ -173,7 +173,7 @@ const ConfigurationGrid = ({
                 handleOptionChange("quantite", (currentValue - 1).toString());
               }
             }}
-            disabled={!selectedOptions.quantite || selectedOptions.quantite === "" || (parseInt(selectedOptions.quantite) || 1) <= 1}
+            disabled={(parseInt(selectedOptions.quantite) || 1) <= 1}
             aria-label="Diminuer la quantité"
           >
             −
@@ -181,7 +181,7 @@ const ConfigurationGrid = ({
           <input
             aria-label="Quantité"
             type="number"
-            value={selectedOptions.quantite || "1"}
+            value={selectedOptions.quantite || ""}
             onChange={(e) => {
               const value = e.target.value;
               // Permettre la valeur vide temporairement pour la saisie
@@ -210,7 +210,7 @@ const ConfigurationGrid = ({
                 handleOptionChange("quantite", (currentValue + 1).toString());
               }
             }}
-            disabled={!selectedOptions.quantite || selectedOptions.quantite === "" || (parseInt(selectedOptions.quantite) || 1) >= 999}
+            disabled={(parseInt(selectedOptions.quantite) || 1) >= 999}
             aria-label="Augmenter la quantité"
           >
             +
