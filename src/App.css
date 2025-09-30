@@ -288,6 +288,11 @@ body {
   width: 1200px;
 }
 
+/* Forcer la largeur maximale en surchargeant .modal-content */
+.modal-content.pdf-preview-modal {
+  max-width: 1200px;
+}
+
 .pdf-preview-body {
   padding: 0;
   max-height: calc(92vh - 120px);
@@ -313,6 +318,11 @@ body {
 .preset-modal {
   max-width: 1100px;
   width: 95vw;
+}
+
+/* Forcer la largeur maximale en surchargeant .modal-content */
+.modal-content.preset-modal {
+  max-width: 1100px;
 }
 
 .preset-grid {
@@ -406,7 +416,7 @@ body {
   padding: 1rem;
 }
 
-.modal-content {
+.modal-content.send-modal {
   background: var(--surface);
   border-radius: var(--radius-lg);
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
