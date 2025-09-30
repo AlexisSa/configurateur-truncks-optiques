@@ -103,30 +103,23 @@ const ResultsSection = ({
 
         {price && unitPrice && priceBreakdown?.quantity?.value > 1 && (
           <div className="unit-price-quantity-row">
-            <div className="result-item unit-price-item">
+            <div className="result-item">
               <div className="result-label">
                 <span className="label-icon">💰</span>
                 <span>Prix à l'unité</span>
               </div>
-              <div className="result-value unit-price">
+              <div className="result-value">
                 {unitPrice.toFixed(2)} €
               </div>
             </div>
 
-            <div className="quantity-section">
-              <div className="quantity-box">
-                <div className="quantity-header">
-                  <span className="quantity-icon">📦</span>
-                  <span className="quantity-title">Quantité</span>
-                </div>
-                <div className="quantity-content">
-                  <div className="quantity-value">
-                    {priceBreakdown.quantity.value}
-                  </div>
-                  <div className="quantity-label">
-                    produits
-                  </div>
-                </div>
+            <div className="result-item">
+              <div className="result-label">
+                <span className="label-icon">📦</span>
+                <span>Quantité</span>
+              </div>
+              <div className="result-value">
+                {priceBreakdown.quantity.value} produits
               </div>
             </div>
           </div>
