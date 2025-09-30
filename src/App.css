@@ -1188,38 +1188,34 @@ body {
 .contact-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
 .contact-header {
-  background: var(--surface-hover);
-  color: var(--text-primary);
-  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--highlight) 0%, #2d32a8 100%);
+  color: white;
+  padding: 1.25rem;
   text-align: center;
-  border-bottom: 2px solid var(--secondary);
+  border-bottom: none;
 }
 
 .contact-header h2 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.contact-header p {
-  font-size: 0.75rem;
-  opacity: 0.9;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.025em;
 }
 
 .contact-content {
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
   flex: 1;
 }
 
@@ -1233,26 +1229,30 @@ body {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.75rem;
-  border-radius: var(--radius-lg);
+  padding: 1rem;
+  border-radius: var(--radius-md);
   background: var(--surface-hover);
+  border: 1px solid var(--border);
   transition: all 0.2s ease;
 }
 
 .contact-method:hover {
-  background: var(--border);
+  background: #f8fafc;
+  border-color: var(--highlight);
   transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(54, 59, 199, 0.1);
 }
 
 .method-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .method-icon svg {
@@ -1263,32 +1263,34 @@ body {
 .method-icon.phone {
   background: var(--highlight);
   color: white;
-  border: 2px solid var(--highlight);
+  border: none;
 }
 
 .method-icon.email {
-  background: var(--surface-hover);
-  color: var(--secondary);
-  border: 2px solid var(--secondary);
+  background: #7c3aed;
+  color: white;
+  border: none;
 }
 
 .method-icon.website {
-  background: var(--surface-hover);
-  color: var(--accent);
-  border: 2px solid var(--accent);
+  background: #059669;
+  color: white;
+  border: none;
 }
 
 .method-content h3 {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 0.25rem;
+  margin: 0 0 0.25rem 0;
 }
 
 .method-content p {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
+  margin: 0;
   line-height: 1.4;
+  font-weight: 500;
 }
 
 /* Responsive */
