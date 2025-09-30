@@ -71,24 +71,8 @@ export const isConfigurationAvailable = (selectedOptions) => {
     };
   }
 
-  // Vérifier si les connecteurs sont disponibles
-  const connectorPrices = TARIFS.connectorPrices;
-  const connectorPriceA =
-    connectorPrices[selectedOptions.modeFibre]?.[selectedOptions.connecteurA];
-  const connectorPriceB =
-    connectorPrices[selectedOptions.modeFibre]?.[selectedOptions.connecteurB];
-
-  if (
-    connectorPriceA === null ||
-    connectorPriceB === null ||
-    connectorPriceA === undefined ||
-    connectorPriceB === undefined
-  ) {
-    return {
-      available: false,
-      reason: `Connecteur non disponible pour ${selectedOptions.modeFibre}`,
-    };
-  }
+  // Les connecteurs sont maintenant inclus dans la main d'œuvre
+  // Plus besoin de vérifier leur disponibilité
 
   return { available: true, reason: null };
 };
