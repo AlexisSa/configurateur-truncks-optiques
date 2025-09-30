@@ -73,7 +73,7 @@ export const generatePdfPreview = async (selectedOptions) => {
         if (unitPrice) {
           return `
             <div style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 8px; border-radius: 4px; border: 1px solid #cbd5e1; margin-bottom: 10px;">
-              <h3 style="margin: 0 0 3px 0; color: #666; font-size: 9px;">📦 Prix à l'unité</h3>
+              <h3 style="margin: 0 0 3px 0; color: #666; font-size: 9px;">📦 Prix à l'unité (${quantity} produits)</h3>
               <p style="margin: 0; font-size: 11px; font-weight: 600; color: #333;">${unitPrice.toFixed(
                 2
               )} €</p>
@@ -310,7 +310,7 @@ export const exportToPDF = async (selectedOptions) => {
         if (unitPrice) {
           return `
             <div style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 8px; border-radius: 4px; border: 1px solid #cbd5e1; margin-bottom: 10px;">
-              <h3 style="margin: 0 0 3px 0; color: #666; font-size: 9px;">📦 Prix à l'unité</h3>
+              <h3 style="margin: 0 0 3px 0; color: #666; font-size: 9px;">📦 Prix à l'unité (${quantity} produits)</h3>
               <p style="margin: 0; font-size: 11px; font-weight: 600; color: #333;">${unitPrice.toFixed(
                 2
               )} €</p>

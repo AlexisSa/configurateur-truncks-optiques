@@ -86,9 +86,11 @@ export const getPriceBreakdown = (selectedOptions) => {
 
   // Main d'œuvre selon le type de câble et le nombre de fibres
   const laborCosts = TARIFS.laborCosts;
-  
+
   // Déterminer le type de tarif de main d'œuvre
-  const isStandardCable = selectedOptions.typeCable === "Standard LSZH" || selectedOptions.typeCable === "Renforcé LSZH";
+  const isStandardCable =
+    selectedOptions.typeCable === "Standard LSZH" ||
+    selectedOptions.typeCable === "Renforcé LSZH";
   const laborType = isStandardCable ? "standard" : "other";
 
   // Coût de regainage selon le nombre de fibres
@@ -136,7 +138,9 @@ export const getPriceBreakdown = (selectedOptions) => {
       },
       labor: {
         total: laborTotal,
-        description: `Main d'œuvre (${laborType === "standard" ? "Standard/Renforcé LSZH" : "Autres types"})`,
+        description: `Main d'œuvre (${
+          laborType === "standard" ? "Standard/Renforcé LSZH" : "Autres types"
+        })`,
       },
       resheathing: {
         total: resheathingTotal,
@@ -148,7 +152,7 @@ export const getPriceBreakdown = (selectedOptions) => {
       },
       shipping: {
         total: shippingTotal,
-        description: 'Frais de port',
+        description: "Frais de port",
       },
       subtotal:
         cableTotal + laborTotal + resheathingTotal + testTotal + shippingTotal,
@@ -191,9 +195,11 @@ export const calculatePrice = (selectedOptions) => {
 
   // Main d'œuvre selon le type de câble et le nombre de fibres
   const laborCosts = TARIFS.laborCosts;
-  
+
   // Déterminer le type de tarif de main d'œuvre
-  const isStandardCable = selectedOptions.typeCable === "Standard LSZH" || selectedOptions.typeCable === "Renforcé LSZH";
+  const isStandardCable =
+    selectedOptions.typeCable === "Standard LSZH" ||
+    selectedOptions.typeCable === "Renforcé LSZH";
   const laborType = isStandardCable ? "standard" : "other";
 
   // Coût de regainage selon le nombre de fibres
@@ -266,11 +272,11 @@ export const generateReference = (selectedOptions) => {
   const fiberCount = selectedOptions.nombreFibres;
   cableStructure.push(fiberCount);
   const cableCode = {
-    "Standard LSZH": "SD0H",
-    "Renforcé LSZH": "RF0H",
-    "Standard PE": "SLPE",
-    "Armé Acier LSZH": "AA0H",
-    "Armé Acier PE": "AAPE",
+    "Standard LSZH": "FSD0H",
+    "Renforcé LSZH": "FRF0H",
+    "Standard PE": "FSLPE",
+    "Armé Acier LSZH": "FAA0H",
+    "Armé Acier PE": "FAAPE",
   };
   cableStructure.push(cableCode[selectedOptions.typeCable]);
   refParts.push(cableStructure.join(""));
