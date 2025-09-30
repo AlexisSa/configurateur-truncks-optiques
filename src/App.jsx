@@ -59,6 +59,7 @@ function App() {
         email: formData.email.trim(),
         telephone: formData.telephone.trim(),
         societe: formData.societe.trim(),
+        adresse: formData.adresse.trim(),
         message: formData.message.trim(),
         pdfName: "configuration.pdf",
         pdfType: "application/pdf",

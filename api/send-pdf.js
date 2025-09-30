@@ -44,6 +44,7 @@ export default async function handler(req, res) {
     const email = body.email?.toString().trim();
     const telephone = body.telephone?.toString().trim();
     const societe = body.societe?.toString().trim();
+    const adresse = (body.adresse || "").toString();
     const message = (body.message || "").toString();
     const pdfName = (body.pdfName || "configuration.pdf").toString();
     const pdfType = (body.pdfType || "application/pdf").toString();
@@ -114,13 +115,14 @@ export default async function handler(req, res) {
             </div>
             
             <div class="content">
-              <div class="info">
-                <h3>👤 Informations du client :</h3>
-                <p><strong>Nom :</strong> ${escapeHtml(nom)} ${escapeHtml(prenom)}</p>
-                <p><strong>Email :</strong> ${escapeHtml(email)}</p>
-                <p><strong>Téléphone :</strong> ${escapeHtml(telephone)}</p>
-                <p><strong>Société :</strong> ${escapeHtml(societe)}</p>
-              </div>
+                     <div class="info">
+                       <h3>👤 Informations du client :</h3>
+                       <p><strong>Nom :</strong> ${escapeHtml(nom)} ${escapeHtml(prenom)}</p>
+                       <p><strong>Email :</strong> ${escapeHtml(email)}</p>
+                       <p><strong>Téléphone :</strong> ${escapeHtml(telephone)}</p>
+                       <p><strong>Société :</strong> ${escapeHtml(societe)}</p>
+                       ${adresse ? `<p><strong>Adresse de livraison :</strong> ${escapeHtml(adresse)}</p>` : ""}
+                     </div>
 
               ${configInfo}
 

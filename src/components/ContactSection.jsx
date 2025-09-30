@@ -12,6 +12,7 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
     email: "",
     telephone: "",
     societe: "",
+    adresse: "",
     message: "",
   });
   const [status, setStatus] = useState("idle"); // idle | compressing | sending | ok | error
@@ -75,6 +76,7 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
           email: "",
           telephone: "",
           societe: "",
+          adresse: "",
           message: "",
         });
         setStatus("idle");
@@ -135,8 +137,8 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
           </div>
 
           <div className="contact-form-section">
-            <h3>Envoyer votre configuration par email</h3>
-            <p>Remplissez le formulaire ci-dessous pour nous envoyer votre configuration personnalisée.</p>
+            <h3>Demander un devis personnalisé</h3>
+            <p>Remplissez le formulaire ci-dessous pour nous envoyer votre configuration et recevoir un devis détaillé.</p>
             
             {status === "ok" ? (
               <div className="success-message">
@@ -231,6 +233,24 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
                 </div>
 
                 <div className="form-group">
+                  <label htmlFor="adresse">
+                    Adresse de livraison <span className="optional">(optionnel)</span>
+                  </label>
+                  <textarea
+                    id="adresse"
+                    name="adresse"
+                    value={formData.adresse}
+                    onChange={handleInputChange}
+                    disabled={status === "sending" || status === "compressing"}
+                    placeholder="Rue, Code postal, Ville, Pays..."
+                    rows="3"
+                  />
+                  <small className="field-help">
+                    Indiquez votre adresse pour recevoir un devis avec frais de livraison
+                  </small>
+                </div>
+
+                <div className="form-group">
                   <label htmlFor="message">Message (optionnel)</label>
                   <textarea
                     id="message"
@@ -268,7 +288,7 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
                       ? "Envoi..."
                       : status === "compressing"
                       ? "Compression..."
-                      : "📧 Envoyer la configuration"}
+                      : "📧 Demander un devis"}
                   </button>
                 </div>
               </form>
