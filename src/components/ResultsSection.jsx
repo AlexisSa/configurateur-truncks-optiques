@@ -128,17 +128,6 @@ const ResultsSection = ({
               </li>
               <li className="breakdown-item">
                 <span className="breakdown-label">
-                  {priceBreakdown.connectors.description}
-                </span>
-                <span className="breakdown-value">
-                  ({priceBreakdown.connectors.priceA}€ +{" "}
-                  {priceBreakdown.connectors.priceB}€) ×{" "}
-                  {selectedOptions.nombreFibres} ={" "}
-                  {priceBreakdown.connectors.total.toFixed(2)}€
-                </span>
-              </li>
-              <li className="breakdown-item">
-                <span className="breakdown-label">
                   {priceBreakdown.labor.description}
                 </span>
                 <span className="breakdown-value">

@@ -16,7 +16,7 @@ const ConfigurationGrid = ({
       >
         <select
           aria-label="Connecteur A"
-          value={selectedOptions.connecteurA}
+          value={selectedOptions.connecteurA || ""}
           onChange={(e) => handleOptionChange("connecteurA", e.target.value)}
         >
           <option value="">Sélectionner</option>
@@ -35,7 +35,7 @@ const ConfigurationGrid = ({
       >
         <select
           aria-label="Connecteur B"
-          value={selectedOptions.connecteurB}
+          value={selectedOptions.connecteurB || ""}
           onChange={(e) => handleOptionChange("connecteurB", e.target.value)}
         >
           <option value="">Sélectionner</option>
@@ -54,7 +54,7 @@ const ConfigurationGrid = ({
       >
         <select
           aria-label="Nombre de fibres"
-          value={selectedOptions.nombreFibres}
+          value={selectedOptions.nombreFibres || ""}
           onChange={(e) => handleOptionChange("nombreFibres", e.target.value)}
         >
           <option value="">Sélectionner</option>
@@ -74,7 +74,7 @@ const ConfigurationGrid = ({
       >
         <select
           aria-label="Mode Fibre"
-          value={selectedOptions.modeFibre}
+          value={selectedOptions.modeFibre || ""}
           onChange={(e) => handleOptionChange("modeFibre", e.target.value)}
         >
           <option value="">Sélectionner</option>
@@ -94,7 +94,7 @@ const ConfigurationGrid = ({
       >
         <select
           aria-label="Type de câble"
-          value={selectedOptions.typeCable}
+          value={selectedOptions.typeCable || ""}
           onChange={(e) => handleOptionChange("typeCable", e.target.value)}
         >
           <option value="">Sélectionner</option>
@@ -115,7 +115,7 @@ const ConfigurationGrid = ({
         <input
           aria-label="Longueur"
           type="number"
-          value={selectedOptions.longueur}
+          value={selectedOptions.longueur || ""}
           onChange={(e) => handleOptionChange("longueur", e.target.value)}
           placeholder="Entrez la longueur"
           min="1"
@@ -131,7 +131,7 @@ const ConfigurationGrid = ({
       >
         <select
           aria-label="Épanouissement"
-          value={selectedOptions.epanouissement}
+          value={selectedOptions.epanouissement || ""}
           onChange={(e) => handleOptionChange("epanouissement", e.target.value)}
         >
           <option value="">Sélectionner</option>
@@ -148,7 +148,7 @@ const ConfigurationGrid = ({
       >
         <select
           aria-label="Type de test"
-          value={selectedOptions.typeTest}
+          value={selectedOptions.typeTest || ""}
           onChange={(e) => handleOptionChange("typeTest", e.target.value)}
         >
           <option value="">Sélectionner</option>
@@ -166,7 +166,7 @@ const ConfigurationGrid = ({
         <input
           aria-label="Quantité"
           type="number"
-          value={selectedOptions.quantite}
+          value={selectedOptions.quantite || "1"}
           onChange={(e) => handleOptionChange("quantite", e.target.value)}
           placeholder="Nombre d'unités"
           min="1"
