@@ -100,11 +100,12 @@ export const getPriceBreakdown = (selectedOptions) => {
   // Tarifs des câbles par mètre linéaire selon la grille tarifaire
   const cablePrices = TARIFS.cablePrices;
 
-  // Tarifs des connecteurs par connecteur
-  const connectorPrices = TARIFS.connectorPrices;
-
-  // Main d'œuvre selon le nombre de fibres
+  // Main d'œuvre selon le type de câble et le nombre de fibres
   const laborCosts = TARIFS.laborCosts;
+  
+  // Déterminer le type de tarif de main d'œuvre
+  const isStandardCable = selectedOptions.typeCable === "Standard LSZH" || selectedOptions.typeCable === "Renforcé LSZH";
+  const laborType = isStandardCable ? "standard" : "other";
 
   // Coût de regainage selon le nombre de fibres
   const resheathingCosts = TARIFS.resheathingCosts;
@@ -112,8 +113,6 @@ export const getPriceBreakdown = (selectedOptions) => {
   // Coût des tests
   const testCosts = TARIFS.testCosts;
 
-  // Prix par brins (pour l'épanouissement)
-  const strandPrices = TARIFS.strandPrices;
 
   try {
     // 1. Prix du câble par mètre linéaire
@@ -124,25 +123,16 @@ export const getPriceBreakdown = (selectedOptions) => {
     const cableTotal =
       cablePricePerMeter * parseFloat(selectedOptions.longueur);
 
-    // 2. Prix des connecteurs (2 connecteurs par fibre)
-    const connectorPriceA =
-      connectorPrices[selectedOptions.modeFibre]?.[selectedOptions.connecteurA];
-    const connectorPriceB =
-      connectorPrices[selectedOptions.modeFibre]?.[selectedOptions.connecteurB];
-    const connectorTotal =
-      (connectorPriceA + connectorPriceB) *
-      parseInt(selectedOptions.nombreFibres);
+    // 2. Main d'œuvre (inclut les connecteurs)
+    const laborTotal = laborCosts[laborType][selectedOptions.nombreFibres];
 
-    // 3. Main d'œuvre
-    const laborTotal = laborCosts[selectedOptions.nombreFibres];
-
-    // 4. Coût de regainage (si épanouissement regainé)
+    // 3. Coût de regainage (si épanouissement regainé)
     const resheathingTotal =
       selectedOptions.epanouissement === "Regainé (2,8 mm)"
         ? resheathingCosts[selectedOptions.nombreFibres]
         : 0;
 
-    // 5. Coût des tests
+    // 4. Coût des tests
     const testTotal =
       selectedOptions.typeTest === "Réflectométrie"
         ? testCosts[selectedOptions.typeTest][selectedOptions.nombreFibres]
@@ -154,15 +144,9 @@ export const getPriceBreakdown = (selectedOptions) => {
         total: cableTotal,
         description: `Câble ${selectedOptions.typeCable} ${selectedOptions.modeFibre}`,
       },
-      connectors: {
-        priceA: connectorPriceA,
-        priceB: connectorPriceB,
-        total: connectorTotal,
-        description: `Connecteurs ${selectedOptions.connecteurA}/${selectedOptions.connecteurB}`,
-      },
       labor: {
         total: laborTotal,
-        description: "Main d'œuvre",
+        description: `Main d'œuvre (${laborType === "standard" ? "Standard/Renforcé LSZH" : "Autres types"})`,
       },
       resheathing: {
         total: resheathingTotal,
@@ -173,12 +157,11 @@ export const getPriceBreakdown = (selectedOptions) => {
         description: `Test ${selectedOptions.typeTest}`,
       },
       subtotal:
-        cableTotal + connectorTotal + laborTotal + resheathingTotal + testTotal,
+        cableTotal + laborTotal + resheathingTotal + testTotal,
       margin: {
         percentage: 50,
         amount:
           (cableTotal +
-            connectorTotal +
             laborTotal +
             resheathingTotal +
             testTotal) *
@@ -191,7 +174,6 @@ export const getPriceBreakdown = (selectedOptions) => {
       },
       total:
         ((cableTotal +
-          connectorTotal +
           laborTotal +
           resheathingTotal +
           testTotal) /
@@ -211,11 +193,12 @@ export const calculatePrice = (selectedOptions) => {
   // Tarifs des câbles par mètre linéaire selon la grille tarifaire
   const cablePrices = TARIFS.cablePrices;
 
-  // Tarifs des connecteurs par connecteur
-  const connectorPrices = TARIFS.connectorPrices;
-
-  // Main d'œuvre selon le nombre de fibres
+  // Main d'œuvre selon le type de câble et le nombre de fibres
   const laborCosts = TARIFS.laborCosts;
+  
+  // Déterminer le type de tarif de main d'œuvre
+  const isStandardCable = selectedOptions.typeCable === "Standard LSZH" || selectedOptions.typeCable === "Renforcé LSZH";
+  const laborType = isStandardCable ? "standard" : "other";
 
   // Coût de regainage selon le nombre de fibres
   const resheathingCosts = TARIFS.resheathingCosts;
@@ -223,8 +206,6 @@ export const calculatePrice = (selectedOptions) => {
   // Coût des tests
   const testCosts = TARIFS.testCosts;
 
-  // Prix par brins (pour l'épanouissement)
-  const strandPrices = TARIFS.strandPrices;
 
   try {
     // 1. Prix du câble par mètre linéaire
@@ -240,35 +221,16 @@ export const calculatePrice = (selectedOptions) => {
     const cableTotal =
       cablePricePerMeter * parseFloat(selectedOptions.longueur);
 
-    // 2. Prix des connecteurs (2 connecteurs par fibre)
-    const connectorPriceA =
-      connectorPrices[selectedOptions.modeFibre]?.[selectedOptions.connecteurA];
-    const connectorPriceB =
-      connectorPrices[selectedOptions.modeFibre]?.[selectedOptions.connecteurB];
+    // 2. Main d'œuvre (inclut les connecteurs)
+    const laborTotal = laborCosts[laborType][selectedOptions.nombreFibres];
 
-    if (
-      connectorPriceA === null ||
-      connectorPriceB === null ||
-      connectorPriceA === undefined ||
-      connectorPriceB === undefined
-    ) {
-      return null; // Configuration de connecteur non disponible
-    }
-
-    const connectorTotal =
-      (connectorPriceA + connectorPriceB) *
-      parseInt(selectedOptions.nombreFibres);
-
-    // 3. Main d'œuvre
-    const laborTotal = laborCosts[selectedOptions.nombreFibres];
-
-    // 4. Coût de regainage (si épanouissement regainé)
+    // 3. Coût de regainage (si épanouissement regainé)
     const resheathingTotal =
       selectedOptions.epanouissement === "Regainé (2,8 mm)"
         ? resheathingCosts[selectedOptions.nombreFibres]
         : 0;
 
-    // 5. Coût des tests
+    // 4. Coût des tests
     const testTotal =
       selectedOptions.typeTest === "Réflectométrie"
         ? testCosts[selectedOptions.typeTest][selectedOptions.nombreFibres]
@@ -276,7 +238,7 @@ export const calculatePrice = (selectedOptions) => {
 
     // Calcul du prix total
     const totalPrice =
-      cableTotal + connectorTotal + laborTotal + resheathingTotal + testTotal;
+      cableTotal + laborTotal + resheathingTotal + testTotal;
 
     // Application de la marge de 50% (diviser par 0.5 = multiplier par 2)
     const priceWithMargin = totalPrice / 0.5;

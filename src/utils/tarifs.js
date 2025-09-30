@@ -229,59 +229,23 @@ export const TARIFS = {
     },
   },
 
-  // Tarifs des connecteurs par connecteur
-  connectorPrices: {
-    "Monomode OS2": {
-      FC: 9.65,
-      LC: 5.09,
-      SC: 4.12,
-      ST: 3.63,
-      SCA: 5.77, // SC/APC
-    },
-    "Multimode OM1": {
-      FC: 6.74,
-      LC: 4.31,
-      SC: 3.15,
-      ST: 2.86,
-      SCA: null, // Pas possible
-    },
-    "Multimode OM2": {
-      FC: 6.74,
-      LC: 4.31,
-      SC: 3.15,
-      ST: 2.86,
-      SCA: null, // Pas possible
-    },
-    "Multimode OM3": {
-      FC: 6.74,
-      LC: 4.31,
-      SC: 3.15,
-      ST: 2.86,
-      SCA: null, // Pas possible
-    },
-    "Multimode OM4": {
-      FC: 6.74,
-      LC: 4.31,
-      SC: 3.15,
-      ST: 2.86,
-      SCA: null, // Pas possible
-    },
-    "Multimode OM5": {
-      FC: 6.74,
-      LC: 4.31,
-      SC: 3.15,
-      ST: 2.86,
-      SCA: null, // Pas possible
-    },
-  },
 
-  // Main d'œuvre selon le nombre de fibres
+  // Main d'œuvre selon le type de câble et le nombre de fibres
   laborCosts: {
-    4: 75.48,
-    6: 104.42,
-    12: 178.24,
-    24: 299.41,
-    48: 593.82,
+    // Pour Standard LSZH et Renforcé LSZH
+    "standard": {
+      4: 75.48,
+      6: 104.42,
+      12: 178.24,
+      24: 299.41,
+    },
+    // Pour Standard PE, Armé Acier LSZH et Armé Acier PE
+    "other": {
+      4: 75.48,
+      6: 104.42,
+      12: 178.24,
+      24: 299.41,
+    },
   },
 
   // Coût de regainage selon le nombre de fibres
@@ -305,12 +269,4 @@ export const TARIFS = {
     },
   },
 
-  // Prix par brins (pour l'épanouissement)
-  strandPrices: {
-    4: 8.0,
-    6: 12.0,
-    12: 24.0,
-    24: 48.0,
-    48: 96.0, // Extrapolation pour 48 brins
-  },
 };
