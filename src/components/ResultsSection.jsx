@@ -3,7 +3,6 @@ import {
   calculatePrice,
   generateReference,
   isConfigurationAvailable,
-  getPriceBreakdown,
   isConfigurationComplete,
 } from "../utils/calculations.js";
 import { generatePdfPreview, exportToPDF } from "../utils/pdfGenerator.js";
@@ -13,19 +12,16 @@ const ResultsSection = ({
   onSaveClick,
   savedConfigsCount = 0,
 }) => {
-  const [showPriceDetail, setShowPriceDetail] = useState(false);
   const [showPdfPreview, setShowPdfPreview] = useState(false);
   const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
 
   const price = calculatePrice(selectedOptions);
   const reference = generateReference(selectedOptions);
   const availability = isConfigurationAvailable(selectedOptions);
-  const priceBreakdown = getPriceBreakdown(selectedOptions);
 
-  // Calcul du prix à l'unité
-  const unitPrice = priceBreakdown
-    ? priceBreakdown.total / (priceBreakdown.quantity?.value || 1)
-    : null;
+  // Calcul du prix à l'unité et de la quantité
+  const quantity = parseInt(selectedOptions.quantite) || 1;
+  const unitPrice = price && quantity > 1 ? price / quantity : null;
 
   const handleGeneratePdfPreview = async () => {
     try {
@@ -73,35 +69,24 @@ const ResultsSection = ({
             <span className="label-icon">💰</span>
             <span>Prix public</span>
           </div>
-          <div className="price-container">
-            <div
-              className={`result-value ${
-                price
-                  ? "price"
-                  : availability?.available === false
-                  ? "error"
-                  : "incomplete"
-              }`}
-            >
-              {price
-                ? `${price} €`
+          <div
+            className={`result-value ${
+              price
+                ? "price"
                 : availability?.available === false
-                ? availability.reason
-                : "Complétez la configuration"}
-            </div>
-            {price && (
-              <button
-                onClick={() => setShowPriceDetail(!showPriceDetail)}
-                className="price-detail-toggle"
-                title={showPriceDetail ? "Masquer le détail" : "Voir le détail"}
-              >
-                {showPriceDetail ? "−" : "+"}
-              </button>
-            )}
+                ? "error"
+                : "incomplete"
+            }`}
+          >
+            {price
+              ? `${price} €`
+              : availability?.available === false
+              ? availability.reason
+              : "Complétez la configuration"}
           </div>
         </div>
 
-        {price && unitPrice && priceBreakdown?.quantity?.value > 1 && (
+        {price && unitPrice && quantity > 1 && (
           <div className="unit-price-quantity-row">
             <div className="result-item">
               <div className="result-label">
@@ -119,67 +104,9 @@ const ResultsSection = ({
                 <span>Quantité</span>
               </div>
               <div className="result-value">
-                {priceBreakdown.quantity.value} produits
+                {quantity} produits
               </div>
             </div>
-          </div>
-        )}
-
-        {priceBreakdown && showPriceDetail && (
-          <div className="price-detail-expanded">
-            <ul className="breakdown-list">
-              <li className="breakdown-item">
-                <span className="breakdown-label">
-                  {priceBreakdown.cable.description}
-                </span>
-                <span className="breakdown-value">
-                  {priceBreakdown.cable.pricePerMeter}€/m ×{" "}
-                  {selectedOptions.longueur}m ={" "}
-                  {priceBreakdown.cable.total.toFixed(2)}€
-                </span>
-              </li>
-              <li className="breakdown-item">
-                <span className="breakdown-label">
-                  {priceBreakdown.labor.description}
-                </span>
-                <span className="breakdown-value">
-                  {priceBreakdown.labor.total.toFixed(2)}€
-                </span>
-              </li>
-              {priceBreakdown.resheathing.total > 0 && (
-                <li className="breakdown-item">
-                  <span className="breakdown-label">
-                    {priceBreakdown.resheathing.description}
-                  </span>
-                  <span className="breakdown-value">
-                    {priceBreakdown.resheathing.total.toFixed(2)}€
-                  </span>
-                </li>
-              )}
-              <li className="breakdown-item">
-                <span className="breakdown-label">
-                  {priceBreakdown.test.description}
-                </span>
-                <span className="breakdown-value">
-                  {priceBreakdown.test.total.toFixed(2)}€
-                </span>
-              </li>
-              <li className="breakdown-item">
-                <span className="breakdown-label">
-                  {priceBreakdown.quantity.description}
-                </span>
-                <span className="breakdown-value">
-                  {priceBreakdown.quantity.value} unité
-                  {priceBreakdown.quantity.value > 1 ? "s" : ""}
-                </span>
-              </li>
-              <li className="breakdown-item total">
-                <span className="breakdown-label">Total</span>
-                <span className="breakdown-value">
-                  {priceBreakdown.total.toFixed(2)}€
-                </span>
-              </li>
-            </ul>
           </div>
         )}
 

@@ -12,13 +12,18 @@ export const isConfigurationComplete = (selectedOptions) => {
     "epanouissement",
     "typeTest",
   ];
-  
+
   // Vérifier les champs obligatoires
-  const basicFieldsComplete = requiredFields.every((field) => selectedOptions[field] !== "");
-  
+  const basicFieldsComplete = requiredFields.every(
+    (field) => selectedOptions[field] !== ""
+  );
+
   // Pour la quantité, considérer vide comme valide (équivalent à 1)
-  const quantityValid = !selectedOptions.quantite || selectedOptions.quantite === "" || parseInt(selectedOptions.quantite) >= 1;
-  
+  const quantityValid =
+    !selectedOptions.quantite ||
+    selectedOptions.quantite === "" ||
+    parseInt(selectedOptions.quantite) >= 1;
+
   return basicFieldsComplete && quantityValid;
 };
 
