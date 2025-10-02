@@ -1123,7 +1123,6 @@ body {
   transform: translateY(0);
 }
 
-
 /* Section contact */
 .contact-section {
   display: flex;
@@ -1399,7 +1398,6 @@ body {
     text-align: center;
     gap: 0.75rem;
   }
-
 }
 
 @media (max-width: 480px) {

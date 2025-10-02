@@ -437,7 +437,7 @@ export const exportToPDF = async (selectedOptions) => {
       <div style="margin-top: 15px; padding-top: 8px; border-top: 1px solid #ddd; font-size: 7px; color: #999; text-align: center;">
         <p style="margin: 0 0 3px 0;">Ce devis est valable 30 jours à compter de sa date de génération</p>
         <p style="margin: 0 0 3px 0;">Tous nos produits sont conformes aux normes CE et aux standards internationaux</p>
-        <p style="margin: 0;">Conditions de vente disponibles sur demande | SIRET: 12345678901234</p>
+        <p style="margin: 0;">Conditions de vente disponibles sur demande | SIRET: 521 756 502 00030</p>
       </div>
     </div>
   `;

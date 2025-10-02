@@ -174,13 +174,25 @@ export default async function handler(req, res) {
       ],
     };
 
+    console.log("Tentative d'envoi d'email avec Resend...");
+    console.log("From:", process.env.CONTACT_FROM);
+    console.log("To: communication@xeilom.fr");
+    console.log("Subject:", emailData.subject);
+    console.log("PDF size:", pdfBuffer.length, "bytes");
+    
     const result = await resend.emails.send(emailData);
+    
+    console.log("Résultat Resend:", JSON.stringify(result, null, 2));
 
     if (result.error) {
       console.error("Erreur Resend:", result.error);
-      return res.status(500).json({ error: "Erreur lors de l'envoi de l'email" });
+      return res.status(500).json({ 
+        error: "Erreur lors de l'envoi de l'email", 
+        details: result.error 
+      });
     }
 
+    console.log("Email envoyé avec succès, ID:", result.data?.id);
     return res.status(200).json({ ok: true, messageId: result.data?.id });
   } catch (error) {
     console.error("Erreur dans l'API send-pdf:", error);

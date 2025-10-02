@@ -93,9 +93,7 @@ const ResultsSection = ({
                 <span className="label-icon">💰</span>
                 <span>Prix à l'unité</span>
               </div>
-              <div className="result-value">
-                {unitPrice.toFixed(2)} €
-              </div>
+              <div className="result-value">{unitPrice.toFixed(2)} €</div>
             </div>
 
             <div className="result-item">
@@ -103,9 +101,7 @@ const ResultsSection = ({
                 <span className="label-icon">📦</span>
                 <span>Quantité</span>
               </div>
-              <div className="result-value">
-                {quantity} produits
-              </div>
+              <div className="result-value">{quantity} produits</div>
             </div>
           </div>
         )}
@@ -134,7 +130,10 @@ const ResultsSection = ({
               onClick={onSaveClick}
               className="save-config-button"
               title="Sauvegarder cette configuration"
-              disabled={!isConfigurationComplete(selectedOptions) || availability?.available === false}
+              disabled={
+                !isConfigurationComplete(selectedOptions) ||
+                availability?.available === false
+              }
             >
               💾 Sauvegarder
               {savedConfigsCount > 0 && (
@@ -145,7 +144,10 @@ const ResultsSection = ({
               onClick={handleGeneratePdfPreview}
               className="preview-button"
               title="Prévisualiser le PDF"
-              disabled={!isConfigurationComplete(selectedOptions) || availability?.available === false}
+              disabled={
+                !isConfigurationComplete(selectedOptions) ||
+                availability?.available === false
+              }
             >
               👁️ Prévisualiser
             </button>
@@ -153,7 +155,10 @@ const ResultsSection = ({
               onClick={handleExportToPDF}
               className="export-button"
               title="Exporter en PDF"
-              disabled={!isConfigurationComplete(selectedOptions) || availability?.available === false}
+              disabled={
+                !isConfigurationComplete(selectedOptions) ||
+                availability?.available === false
+              }
             >
               📄 Exporter en PDF
             </button>
