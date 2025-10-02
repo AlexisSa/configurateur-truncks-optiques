@@ -68,7 +68,7 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
       setProgress("Génération et envoi du PDF en cours...");
 
       // Déclencher la génération et l'envoi du PDF
-      await onSendPdfClick();
+      await onSendPdfClick(formData);
 
       setStatus("ok");
       setProgress("PDF envoyé avec succès !");
