@@ -37,12 +37,8 @@ function App() {
   // Fonction pour générer le PDF et l'envoyer directement
   const handleSendPdf = async (formData) => {
     try {
-      const { generatePdfForEmail } = await import("./utils/pdfGenerator.js");
-      const pdf = await generatePdfForEmail(selectedOptions);
-
-      // Générer le PDF en base64
-      const pdfOutput = pdf.output("datauristring");
-      const base64 = pdfOutput.split(",")[1];
+      const { generatePdfBlob } = await import("./utils/pdfGenerator.js");
+      const pdfData = await generatePdfBlob(selectedOptions);
 
       // Construire le payload JSON
       const payload = {
@@ -56,10 +52,10 @@ function App() {
         ville: formData.ville.trim(),
         codePostal: formData.codePostal.trim(),
         message: formData.message.trim(),
-        pdfName: "configuration.pdf",
+        pdfName: pdfData.fileName,
         pdfType: "application/pdf",
-        pdfBase64: `data:application/pdf;base64,${base64}`,
-        pdfSize: base64.length * 0.75, // Approximation de la taille en bytes
+        pdfBase64: `data:application/pdf;base64,${pdfData.base64}`,
+        pdfSize: pdfData.size,
         configData: {
           reference: selectedOptions
             ? generateReference(selectedOptions)

@@ -244,10 +244,10 @@ export const generatePdfPreview = async (selectedOptions) => {
 };
 
 // Fonction pour exporter en PDF
-export const exportToPDF = async (selectedOptions) => {
+// Fonction pour générer un PDF et le retourner (pour l'envoi par email)
+export const generatePdfBlob = async (selectedOptions) => {
   if (!selectedOptions) {
-    alert("Veuillez compléter la configuration avant d'exporter");
-    return;
+    throw new Error("Configuration manquante");
   }
 
   // Créer un conteneur avec des dimensions fixes pour tous les appareils
@@ -469,15 +469,44 @@ export const exportToPDF = async (selectedOptions) => {
     // Ajouter l'image sur une seule page A4
     pdf.addImage(imgData, "PNG", 0, 0, 210, 297);
 
-    const fileName = `trunck-optique-${generateReference(
-      selectedOptions
-    )}-${date.replace(/\//g, "-")}.pdf`;
-    pdf.save(fileName);
+    // Retourner le PDF en base64
+    const pdfOutput = pdf.output("datauristring");
+    const base64 = pdfOutput.split(",")[1];
+    
+    return {
+      base64,
+      size: base64.length * 0.75, // Approximation de la taille en bytes
+      fileName: `trunck-optique-${generateReference(selectedOptions)}-${date.replace(/\//g, "-")}.pdf`
+    };
   } catch (error) {
     console.error("Erreur lors de la génération du PDF:", error);
-    alert("Erreur lors de la génération du PDF. Veuillez réessayer.");
+    throw error;
   } finally {
     document.body.removeChild(pdfContent);
+  }
+};
+
+// Fonction pour exporter en PDF (téléchargement)
+export const exportToPDF = async (selectedOptions) => {
+  if (!selectedOptions) {
+    alert("Veuillez compléter la configuration avant d'exporter");
+    return;
+  }
+
+  try {
+    const pdfData = await generatePdfBlob(selectedOptions);
+    const pdf = new jsPDF("p", "mm", "a4");
+    const base64 = pdfData.base64;
+    
+    // Reconstituer le PDF pour le téléchargement
+    const pdfOutput = `data:application/pdf;base64,${base64}`;
+    const link = document.createElement("a");
+    link.href = pdfOutput;
+    link.download = pdfData.fileName;
+    link.click();
+  } catch (error) {
+    console.error("Erreur lors de l'export PDF:", error);
+    alert("Erreur lors de l'export PDF. Veuillez réessayer.");
   }
 };
 
@@ -494,14 +523,14 @@ export const generatePdfForEmail = async (selectedOptions) => {
   const unitPrice = price && quantity > 1 ? price / quantity : null;
 
   const pdf = new jsPDF("p", "mm", "a4");
-  
+
   // Configuration des polices
   pdf.setFont("helvetica", "normal");
-  
+
   // En-tête
   pdf.setFillColor(54, 59, 199); // #363bc7
   pdf.rect(0, 0, 210, 30, "F");
-  
+
   // Logo X
   pdf.setFillColor(255, 255, 255);
   pdf.circle(15, 15, 8, "F");
@@ -509,51 +538,55 @@ export const generatePdfForEmail = async (selectedOptions) => {
   pdf.setFontSize(12);
   pdf.setFont("helvetica", "bold");
   pdf.text("X", 15, 19);
-  
+
   // Titre
   pdf.setTextColor(255, 255, 255);
   pdf.setFontSize(16);
   pdf.setFont("helvetica", "bold");
   pdf.text("XEILOM - Configurateur de Truncks Optiques", 30, 20);
-  
+
   // Sous-titre
   pdf.setFontSize(10);
   pdf.setFont("helvetica", "normal");
-  pdf.text(`Devis technique généré le ${date} | Référence: ${reference}`, 30, 25);
+  pdf.text(
+    `Devis technique généré le ${date} | Référence: ${reference}`,
+    30,
+    25
+  );
   pdf.text("Spécialiste en solutions optiques professionnelles", 30, 28);
-  
+
   // Réinitialiser la couleur
   pdf.setTextColor(0, 0, 0);
-  
+
   let yPosition = 45;
-  
+
   // Section Résultats
   pdf.setFontSize(14);
   pdf.setFont("helvetica", "bold");
   pdf.setTextColor(54, 59, 199);
   pdf.text("Résultats de la configuration", 20, yPosition);
-  
+
   yPosition += 10;
-  
+
   // Référence et Prix
   pdf.setFontSize(10);
   pdf.setFont("helvetica", "normal");
   pdf.setTextColor(0, 0, 0);
-  
+
   pdf.text("Référence à commander:", 20, yPosition);
   pdf.setFont("helvetica", "bold");
   pdf.text(reference, 80, yPosition);
-  
+
   yPosition += 8;
-  
+
   pdf.setFont("helvetica", "normal");
   pdf.text("Prix public:", 20, yPosition);
   pdf.setFont("helvetica", "bold");
   pdf.setTextColor(54, 59, 199);
   pdf.text(`${price} €`, 80, yPosition);
-  
+
   yPosition += 8;
-  
+
   // Prix à l'unité et quantité si applicable
   if (unitPrice) {
     pdf.setFont("helvetica", "normal");
@@ -561,33 +594,33 @@ export const generatePdfForEmail = async (selectedOptions) => {
     pdf.text(`Prix à l'unité (${quantity} produits):`, 20, yPosition);
     pdf.setFont("helvetica", "bold");
     pdf.text(`${unitPrice.toFixed(2)} €`, 80, yPosition);
-    
+
     yPosition += 8;
-    
+
     pdf.setFont("helvetica", "normal");
     pdf.text("Quantité:", 20, yPosition);
     pdf.setFont("helvetica", "bold");
     pdf.text(`${quantity} produits`, 80, yPosition);
-    
+
     yPosition += 8;
   }
-  
+
   // Délai de fabrication
   pdf.setFont("helvetica", "normal");
   pdf.text("Délai de fabrication:", 20, yPosition);
   pdf.setFont("helvetica", "bold");
   pdf.text("Environ 1 semaine", 80, yPosition);
-  
+
   yPosition += 15;
-  
+
   // Section Détails
   pdf.setFontSize(14);
   pdf.setFont("helvetica", "bold");
   pdf.setTextColor(54, 59, 199);
   pdf.text("Détails de la configuration", 20, yPosition);
-  
+
   yPosition += 10;
-  
+
   // Détails en deux colonnes
   const details = [
     ["Connecteur A", selectedOptions.connecteurA],
@@ -597,51 +630,55 @@ export const generatePdfForEmail = async (selectedOptions) => {
     ["Type de câble", selectedOptions.typeCable],
     ["Longueur", `${selectedOptions.longueur} m`],
     ["Épanouissement", selectedOptions.epanouissement],
-    ["Type de test", selectedOptions.typeTest]
+    ["Type de test", selectedOptions.typeTest],
   ];
-  
+
   pdf.setFontSize(10);
   pdf.setFont("helvetica", "normal");
   pdf.setTextColor(0, 0, 0);
-  
+
   details.forEach(([label, value], index) => {
     const x = index % 2 === 0 ? 20 : 110;
     const y = yPosition + Math.floor(index / 2) * 8;
-    
+
     pdf.text(`${label}:`, x, y);
     pdf.setFont("helvetica", "bold");
     pdf.text(value, x + 40, y);
     pdf.setFont("helvetica", "normal");
   });
-  
+
   yPosition += Math.ceil(details.length / 2) * 8 + 15;
-  
+
   // Section Résumé
   pdf.setFontSize(14);
   pdf.setFont("helvetica", "bold");
   pdf.setTextColor(54, 59, 199);
   pdf.text("Résumé de la configuration", 20, yPosition);
-  
+
   yPosition += 10;
-  
+
   pdf.setFontSize(10);
   pdf.setFont("helvetica", "normal");
   pdf.setTextColor(0, 0, 0);
-  
+
   const summary = `Trunck : ${selectedOptions.connecteurA}/${selectedOptions.connecteurB} ${selectedOptions.nombreFibres} Fibres ${selectedOptions.modeFibre} ${selectedOptions.typeCable} de ${selectedOptions.longueur}m avec test de ${selectedOptions.typeTest}`;
-  
+
   // Diviser le texte en lignes si trop long
   const lines = pdf.splitTextToSize(summary, 170);
-  lines.forEach(line => {
+  lines.forEach((line) => {
     pdf.text(line, 20, yPosition);
     yPosition += 5;
   });
-  
+
   // Pied de page
   yPosition = 280;
   pdf.setFontSize(8);
   pdf.setTextColor(100, 100, 100);
-  pdf.text("Conditions de vente disponibles sur demande | SIRET: 521 756 502 00030", 20, yPosition);
-  
+  pdf.text(
+    "Conditions de vente disponibles sur demande | SIRET: 521 756 502 00030",
+    20,
+    yPosition
+  );
+
   return pdf;
 };
