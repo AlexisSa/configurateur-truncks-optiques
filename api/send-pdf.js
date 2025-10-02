@@ -64,8 +64,8 @@ export default async function handler(req, res) {
 
     const cleanedBase64 = pdfBase64.includes(",") ? pdfBase64.split(",")[1] : pdfBase64;
     const pdfBuffer = Buffer.from(cleanedBase64, "base64");
-    if (pdfBuffer.length > 4_500_000) {
-      return res.status(400).json({ error: "Fichier trop volumineux (max 4.5MB)" });
+    if (pdfBuffer.length > 10_000_000) { // Augmenté à 10MB
+      return res.status(400).json({ error: "Fichier trop volumineux (max 10MB)" });
     }
 
     let configInfo = "";
