@@ -159,11 +159,12 @@ export const getPriceBreakdown = (selectedOptions) => {
     ) {
       const connectorPrice = scapcConnectorPrices[nombreFibres];
       if (connectorPrice) {
-        // Compter le nombre de connecteurs SC/APC
+        // Compter le nombre de connecteurs SC/APC pour l'affichage
         scapcConnectorCount =
           (selectedOptions.connecteurA === "SCA" ? 1 : 0) +
           (selectedOptions.connecteurB === "SCA" ? 1 : 0);
-        scapcConnectorTotal = connectorPrice * scapcConnectorCount;
+        // Prix fixe qu'il y ait un ou deux connecteurs SC/APC
+        scapcConnectorTotal = connectorPrice;
       }
     }
 
@@ -194,7 +195,7 @@ export const getPriceBreakdown = (selectedOptions) => {
       scapcConnectors: {
         total: scapcConnectorTotal,
         count: scapcConnectorCount,
-        description: `Connecteurs SC/APC (${scapcConnectorCount} × ${
+        description: `Connecteurs SC/APC (prix fixe: ${
           scapcConnectorPrices[nombreFibres] || 0
         }€)`,
       },
@@ -312,11 +313,8 @@ export const calculatePrice = (selectedOptions) => {
     ) {
       const connectorPrice = scapcConnectorPrices[nombreFibres];
       if (connectorPrice) {
-        // Compter le nombre de connecteurs SC/APC
-        const scapcCount =
-          (selectedOptions.connecteurA === "SCA" ? 1 : 0) +
-          (selectedOptions.connecteurB === "SCA" ? 1 : 0);
-        scapcConnectorTotal = connectorPrice * scapcCount;
+        // Prix fixe qu'il y ait un ou deux connecteurs SC/APC
+        scapcConnectorTotal = connectorPrice;
       }
     }
 
