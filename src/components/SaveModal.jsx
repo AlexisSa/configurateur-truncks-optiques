@@ -62,7 +62,9 @@ const SaveModal = ({
     }
     return `${selectedOptions.connecteurA}/${selectedOptions.connecteurB} - ${
       selectedOptions.nombreFibres || "?"
-    } fibres - ${selectedOptions.modeFibre || "?"}`;
+    } fibres - ${selectedOptions.modeFibre || "?"} - ${
+      selectedOptions.epanouissement || "?"
+    }`;
   };
 
   if (!showSaveModal) return null;

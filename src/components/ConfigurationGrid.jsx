@@ -136,7 +136,20 @@ const ConfigurationGrid = ({
         >
           <option value="">Sélectionner</option>
           <option value="Regainé (2,8 mm)">Regainé (2,8 mm)</option>
-          <option value="Standard (900 µm)">Standard (900 µm)</option>
+          <option
+            value="Standard (900 µm)"
+            disabled={
+              selectedOptions.typeCable === "Standard PE" ||
+              selectedOptions.typeCable === "Armé Acier LSZH" ||
+              selectedOptions.typeCable === "Armé Acier PE"
+            }
+          >
+            Standard (900 µm)
+            {(selectedOptions.typeCable === "Standard PE" ||
+              selectedOptions.typeCable === "Armé Acier LSZH" ||
+              selectedOptions.typeCable === "Armé Acier PE") &&
+              " (Non disponible pour ce type de câble)"}
+          </option>
         </select>
       </ConfigurationItem>
 

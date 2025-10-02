@@ -272,4 +272,13 @@ export const TARIFS = {
 
   // Frais de port fixes
   shippingCost: 20.0,
+
+  // Tarifs des connecteurs SC/APC par connecteur selon le nombre de fibres
+  scapcConnectorPrices: {
+    4: 4.0,
+    6: 6.0,
+    12: 12.0,
+    24: 24.0,
+    48: 48.0,
+  },
 };

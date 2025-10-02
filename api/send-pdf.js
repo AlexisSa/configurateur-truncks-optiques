@@ -250,9 +250,9 @@ export default async function handler(req, res) {
     const emailDataClient = {
       from: process.env.CONTACT_FROM,
       to: email,
-      subject: `Votre configuration de trunck optique - ${escapeHtml(nom)} ${escapeHtml(
-        prenom
-      )}`,
+      subject: `Votre configuration de trunck optique - ${escapeHtml(
+        nom
+      )} ${escapeHtml(prenom)}`,
       html: `
         <!DOCTYPE html>
         <html>
@@ -278,8 +278,12 @@ export default async function handler(req, res) {
               <div class="content">
                 <div class="info">
                   <h3>📋 Votre configuration</h3>
-                  <p><strong>Référence :</strong> ${escapeHtml(configData?.reference || "N/A")}</p>
-                  <p><strong>Prix public :</strong> ${escapeHtml(String(configData?.price ?? "N/A"))} €</p>
+                  <p><strong>Référence :</strong> ${escapeHtml(
+                    configData?.reference || "N/A"
+                  )}</p>
+                  <p><strong>Prix public :</strong> ${escapeHtml(
+                    String(configData?.price ?? "N/A")
+                  )} €</p>
                   <p><strong>Délai de fabrication :</strong> Environ 1 semaine</p>
                 </div>
 
@@ -320,7 +324,10 @@ export default async function handler(req, res) {
 
     // Envoyer l'email à XEILOM
     const resultXeilom = await resend.emails.send(emailDataXeilom);
-    console.log("Résultat email XEILOM:", JSON.stringify(resultXeilom, null, 2));
+    console.log(
+      "Résultat email XEILOM:",
+      JSON.stringify(resultXeilom, null, 2)
+    );
 
     if (resultXeilom.error) {
       console.error("Erreur Resend XEILOM:", resultXeilom.error);
@@ -332,7 +339,10 @@ export default async function handler(req, res) {
 
     // Envoyer l'email au client
     const resultClient = await resend.emails.send(emailDataClient);
-    console.log("Résultat email Client:", JSON.stringify(resultClient, null, 2));
+    console.log(
+      "Résultat email Client:",
+      JSON.stringify(resultClient, null, 2)
+    );
 
     if (resultClient.error) {
       console.error("Erreur Resend Client:", resultClient.error);
@@ -345,13 +355,13 @@ export default async function handler(req, res) {
     console.log("Emails envoyés avec succès");
     console.log("ID email XEILOM:", resultXeilom.data?.id);
     console.log("ID email Client:", resultClient.data?.id);
-    
-    return res.status(200).json({ 
-      ok: true, 
+
+    return res.status(200).json({
+      ok: true,
       messageIds: {
         xeilom: resultXeilom.data?.id,
-        client: resultClient.data?.id
-      }
+        client: resultClient.data?.id,
+      },
     });
   } catch (error) {
     console.error("Erreur dans l'API send-pdf:", error);

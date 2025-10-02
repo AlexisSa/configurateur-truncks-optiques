@@ -121,8 +121,9 @@ const ResultsSection = ({
           <p>
             Trunck : {selectedOptions.connecteurA}/{selectedOptions.connecteurB}{" "}
             {selectedOptions.nombreFibres} Fibres {selectedOptions.modeFibre}{" "}
-            {selectedOptions.typeCable} de {selectedOptions.longueur}m avec test
-            de {selectedOptions.typeTest}
+            {selectedOptions.typeCable} de {selectedOptions.longueur}m avec
+            épanouissement {selectedOptions.epanouissement} et test de{" "}
+            {selectedOptions.typeTest}
           </p>
 
           <div className="export-buttons">

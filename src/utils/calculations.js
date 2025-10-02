@@ -113,6 +113,9 @@ export const getPriceBreakdown = (selectedOptions) => {
   // Frais de port
   const shippingCost = TARIFS.shippingCost;
 
+  // Tarifs des connecteurs SC/APC
+  const scapcConnectorPrices = TARIFS.scapcConnectorPrices;
+
   try {
     // 1. Prix du câble par mètre linéaire
     const nombreFibres = parseInt(selectedOptions.nombreFibres);
@@ -147,6 +150,23 @@ export const getPriceBreakdown = (selectedOptions) => {
     // 5. Frais de port
     const shippingTotal = shippingCost;
 
+    // 6. Coût des connecteurs SC/APC
+    let scapcConnectorTotal = 0;
+    let scapcConnectorCount = 0;
+    if (
+      selectedOptions.connecteurA === "SCA" ||
+      selectedOptions.connecteurB === "SCA"
+    ) {
+      const connectorPrice = scapcConnectorPrices[nombreFibres];
+      if (connectorPrice) {
+        // Compter le nombre de connecteurs SC/APC
+        scapcConnectorCount =
+          (selectedOptions.connecteurA === "SCA" ? 1 : 0) +
+          (selectedOptions.connecteurB === "SCA" ? 1 : 0);
+        scapcConnectorTotal = connectorPrice * scapcConnectorCount;
+      }
+    }
+
     return {
       cable: {
         pricePerMeter: cablePricePerMeter,
@@ -171,8 +191,20 @@ export const getPriceBreakdown = (selectedOptions) => {
         total: shippingTotal,
         description: "Frais de port",
       },
+      scapcConnectors: {
+        total: scapcConnectorTotal,
+        count: scapcConnectorCount,
+        description: `Connecteurs SC/APC (${scapcConnectorCount} × ${
+          scapcConnectorPrices[nombreFibres] || 0
+        }€)`,
+      },
       subtotal:
-        cableTotal + laborTotal + resheathingTotal + testTotal + shippingTotal,
+        cableTotal +
+        laborTotal +
+        resheathingTotal +
+        testTotal +
+        shippingTotal +
+        scapcConnectorTotal,
       margin: {
         percentage: 50,
         amount:
@@ -180,7 +212,8 @@ export const getPriceBreakdown = (selectedOptions) => {
             laborTotal +
             resheathingTotal +
             testTotal +
-            shippingTotal) *
+            shippingTotal +
+            scapcConnectorTotal) *
           1.5, // Marge de 60% = coût * 1.5 (car prix final = coût / 0.4)
         description: "Marge commerciale (60%)",
       },
@@ -193,7 +226,8 @@ export const getPriceBreakdown = (selectedOptions) => {
           laborTotal +
           resheathingTotal +
           testTotal +
-          shippingTotal) /
+          shippingTotal +
+          scapcConnectorTotal) /
           0.4) *
         (parseInt(selectedOptions.quantite) || 1),
     };
@@ -227,6 +261,9 @@ export const calculatePrice = (selectedOptions) => {
 
   // Frais de port
   const shippingCost = TARIFS.shippingCost;
+
+  // Tarifs des connecteurs SC/APC
+  const scapcConnectorPrices = TARIFS.scapcConnectorPrices;
 
   try {
     // 1. Prix du câble par mètre linéaire
@@ -267,9 +304,30 @@ export const calculatePrice = (selectedOptions) => {
     // 5. Frais de port
     const shippingTotal = shippingCost;
 
+    // 6. Coût des connecteurs SC/APC
+    let scapcConnectorTotal = 0;
+    if (
+      selectedOptions.connecteurA === "SCA" ||
+      selectedOptions.connecteurB === "SCA"
+    ) {
+      const connectorPrice = scapcConnectorPrices[nombreFibres];
+      if (connectorPrice) {
+        // Compter le nombre de connecteurs SC/APC
+        const scapcCount =
+          (selectedOptions.connecteurA === "SCA" ? 1 : 0) +
+          (selectedOptions.connecteurB === "SCA" ? 1 : 0);
+        scapcConnectorTotal = connectorPrice * scapcCount;
+      }
+    }
+
     // Calcul du prix total
     const totalPrice =
-      cableTotal + laborTotal + resheathingTotal + testTotal + shippingTotal;
+      cableTotal +
+      laborTotal +
+      resheathingTotal +
+      testTotal +
+      shippingTotal +
+      scapcConnectorTotal;
 
     // Application de la marge de 60% (diviser par 0.4 = multiplier par 2.5)
     const priceWithMargin = totalPrice / 0.4;

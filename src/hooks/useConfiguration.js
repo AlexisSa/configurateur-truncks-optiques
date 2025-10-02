@@ -178,6 +178,16 @@ export const useConfiguration = () => {
         newOptions.modeFibre = "Monomode OS2";
       }
 
+      // Forcer l'épanouissement "Regainé" pour Standard PE, Armé Acier LSZH et Armé Acier PE
+      if (
+        option === "typeCable" &&
+        (value === "Standard PE" ||
+          value === "Armé Acier LSZH" ||
+          value === "Armé Acier PE")
+      ) {
+        newOptions.epanouissement = "Regainé (2,8 mm)";
+      }
+
       return newOptions;
     });
   };
