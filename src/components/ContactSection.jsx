@@ -231,7 +231,7 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
                       disabled={
                         status === "sending" || status === "compressing"
                       }
-                      placeholder="06 12 34 56 78"
+                      placeholder="Votre numéro de téléphone"
                     />
                   </div>
 
@@ -306,7 +306,7 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
                         disabled={
                           status === "sending" || status === "compressing"
                         }
-                        placeholder="75001"
+                        placeholder="Votre code postal"
                         maxLength="5"
                       />
                     </div>
@@ -322,7 +322,7 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
                         disabled={
                           status === "sending" || status === "compressing"
                         }
-                        placeholder="Paris"
+                        placeholder="Votre ville"
                       />
                     </div>
                   </div>

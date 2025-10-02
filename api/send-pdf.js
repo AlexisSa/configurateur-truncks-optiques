@@ -233,8 +233,8 @@ export default async function handler(req, res) {
       from: process.env.CONTACT_FROM,
       to: "communication@xeilom.fr",
       reply_to: email,
-      subject: `Nouveau PDF du configurateur — ${escapeHtml(nom)} ${escapeHtml(
-        prenom
+      subject: `Nouveau configurateur de trunck optique — ${escapeHtml(
+        societe
       )}`,
       html: emailHtml,
       attachments: [
@@ -250,9 +250,7 @@ export default async function handler(req, res) {
     const emailDataClient = {
       from: process.env.CONTACT_FROM,
       to: email,
-      subject: `Votre configuration de trunck optique - ${escapeHtml(
-        nom
-      )} ${escapeHtml(prenom)}`,
+      subject: `Votre configuration de trunck optique - Xeilom`,
       html: `
         <!DOCTYPE html>
         <html>
