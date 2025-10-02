@@ -33,7 +33,7 @@ export const generatePdfPreview = async (selectedOptions) => {
   pdfContent.innerHTML = `
     <div style="text-align: center; margin-bottom: 15px; border-bottom: 2px solid #363bc7; padding-bottom: 8px;">
       <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 5px;">
-        <div style="width: 20px; height: 20px; background: #363bc7; border-radius: 50%; margin-right: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold;">X</div>
+        <img src="/src/assets/img/logo-quadri-hd-scaled-removebg-preview.png" alt="XEILOM Logo" style="height: 30px; margin-right: 10px; object-fit: contain;" />
         <h1 style="color: #363bc7; margin: 0; font-size: 18px;">XEILOM - Configurateur de Truncks Optiques</h1>
       </div>
       <p style="color: #666; margin: 3px 0 0 0; font-size: 11px;">Devis technique généré le ${date} | Référence: ${generateReference(
@@ -271,6 +271,7 @@ export const generatePdfBlob = async (selectedOptions) => {
   pdfContent.innerHTML = `
     <div style="text-align: center; margin-bottom: 15px; border-bottom: 2px solid #363bc7; padding-bottom: 8px;">
       <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 5px;">
+        <img src="/src/assets/img/logo-quadri-hd-scaled-removebg-preview.png" alt="XEILOM Logo" style="height: 25px; margin-right: 8px; object-fit: contain;" />
         <h1 style="color: #363bc7; margin: 0; font-size: 16px;">XEILOM - Configurateur de truncks optiques</h1>
       </div>
       <p style="color: #666; margin: 3px 0 0 0; font-size: 9px;">Devis technique généré le ${date} | Référence: ${generateReference(

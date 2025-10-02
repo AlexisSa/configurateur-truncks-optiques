@@ -123,6 +123,10 @@ export default async function handler(req, res) {
       }
     }
 
+    // Logo XEILOM en base64
+    const logoBase64 =
+      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+
     const emailHtml = `
       <!DOCTYPE html>
       <html>
@@ -133,6 +137,8 @@ export default async function handler(req, res) {
             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
             .header { background: #363bc7; color: white; padding: 20px; border-radius: 8px 8px 0 0; }
+            .header-content { display: flex; align-items: center; margin-bottom: 10px; }
+            .logo { height: 40px; margin-right: 15px; }
             .content { background: #f8f9fa; padding: 20px; border-radius: 0 0 8px 8px; }
             .info { background: white; padding: 15px; margin: 15px 0; border-radius: 5px; border-left: 4px solid #363bc7; }
             .message { background: #e3f2fd; padding: 15px; margin: 15px 0; border-radius: 5px; }
@@ -144,14 +150,19 @@ export default async function handler(req, res) {
         <body>
           <div class="container">
             <div class="header">
-              <h1>🔧 Nouvelle configuration de trunck optique</h1>
-              <p>Reçue le ${new Date().toLocaleDateString("fr-FR", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}</p>
+              <div class="header-content">
+                <img src="data:image/png;base64,${logoBase64}" alt="XEILOM Logo" class="logo" />
+                <div>
+                  <h1>🔧 Nouvelle configuration de trunck optique</h1>
+                  <p>Reçue le ${new Date().toLocaleDateString("fr-FR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}</p>
+                </div>
+              </div>
             </div>
             
             <div class="content">
@@ -261,6 +272,8 @@ export default async function handler(req, res) {
               body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
               .header { background: #363bc7; color: white; padding: 20px; border-radius: 8px 8px 0 0; }
+              .header-content { display: flex; align-items: center; margin-bottom: 10px; }
+              .logo { height: 40px; margin-right: 15px; }
               .content { background: #f8f9fa; padding: 20px; border-radius: 0 0 8px 8px; }
               .info { background: white; padding: 15px; margin: 15px 0; border-radius: 5px; border-left: 4px solid #363bc7; }
               .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #666; }
@@ -269,8 +282,15 @@ export default async function handler(req, res) {
           <body>
             <div class="container">
               <div class="header">
-                <h1>✅ Configuration reçue</h1>
-                <p>Merci ${escapeHtml(prenom)} pour votre demande de devis</p>
+                <div class="header-content">
+                  <img src="data:image/png;base64,${logoBase64}" alt="XEILOM Logo" class="logo" />
+                  <div>
+                    <h1>✅ Configuration reçue</h1>
+                    <p>Merci ${escapeHtml(
+                      prenom
+                    )} pour votre demande de devis</p>
+                  </div>
+                </div>
               </div>
               
               <div class="content">
