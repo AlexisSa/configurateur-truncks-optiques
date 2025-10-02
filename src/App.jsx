@@ -37,20 +37,12 @@ function App() {
   // Fonction pour générer le PDF et l'envoyer directement
   const handleSendPdf = async (formData) => {
     try {
-      const { generatePdfPreview } = await import("./utils/pdfGenerator.js");
-      const imgData = await generatePdfPreview(selectedOptions);
+      const { generatePdfForEmail } = await import("./utils/pdfGenerator.js");
+      const pdf = await generatePdfForEmail(selectedOptions);
 
-      // Créer un Blob à partir de l'image
-      const response = await fetch(imgData);
-      const blob = await response.blob();
-
-      // Convertir le PDF en base64
-      const arrayBuffer = await blob.arrayBuffer();
-      const uint8 = new Uint8Array(arrayBuffer);
-      let binary = "";
-      for (let i = 0; i < uint8.length; i++)
-        binary += String.fromCharCode(uint8[i]);
-      const base64 = btoa(binary);
+      // Générer le PDF en base64
+      const pdfOutput = pdf.output("datauristring");
+      const base64 = pdfOutput.split(",")[1];
 
       // Construire le payload JSON
       const payload = {
@@ -67,7 +59,7 @@ function App() {
         pdfName: "configuration.pdf",
         pdfType: "application/pdf",
         pdfBase64: `data:application/pdf;base64,${base64}`,
-        pdfSize: blob.size,
+        pdfSize: base64.length * 0.75, // Approximation de la taille en bytes
         configData: {
           reference: selectedOptions
             ? generateReference(selectedOptions)

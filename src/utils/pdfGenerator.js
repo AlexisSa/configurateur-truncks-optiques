@@ -480,3 +480,168 @@ export const exportToPDF = async (selectedOptions) => {
     document.body.removeChild(pdfContent);
   }
 };
+
+// Fonction pour générer un vrai PDF pour l'envoi par email
+export const generatePdfForEmail = async (selectedOptions) => {
+  if (!selectedOptions) {
+    throw new Error("Configuration manquante");
+  }
+
+  const date = new Date().toLocaleDateString("fr-FR");
+  const reference = generateReference(selectedOptions);
+  const price = calculatePrice(selectedOptions);
+  const quantity = parseInt(selectedOptions.quantite) || 1;
+  const unitPrice = price && quantity > 1 ? price / quantity : null;
+
+  const pdf = new jsPDF("p", "mm", "a4");
+  
+  // Configuration des polices
+  pdf.setFont("helvetica", "normal");
+  
+  // En-tête
+  pdf.setFillColor(54, 59, 199); // #363bc7
+  pdf.rect(0, 0, 210, 30, "F");
+  
+  // Logo X
+  pdf.setFillColor(255, 255, 255);
+  pdf.circle(15, 15, 8, "F");
+  pdf.setTextColor(54, 59, 199);
+  pdf.setFontSize(12);
+  pdf.setFont("helvetica", "bold");
+  pdf.text("X", 15, 19);
+  
+  // Titre
+  pdf.setTextColor(255, 255, 255);
+  pdf.setFontSize(16);
+  pdf.setFont("helvetica", "bold");
+  pdf.text("XEILOM - Configurateur de Truncks Optiques", 30, 20);
+  
+  // Sous-titre
+  pdf.setFontSize(10);
+  pdf.setFont("helvetica", "normal");
+  pdf.text(`Devis technique généré le ${date} | Référence: ${reference}`, 30, 25);
+  pdf.text("Spécialiste en solutions optiques professionnelles", 30, 28);
+  
+  // Réinitialiser la couleur
+  pdf.setTextColor(0, 0, 0);
+  
+  let yPosition = 45;
+  
+  // Section Résultats
+  pdf.setFontSize(14);
+  pdf.setFont("helvetica", "bold");
+  pdf.setTextColor(54, 59, 199);
+  pdf.text("Résultats de la configuration", 20, yPosition);
+  
+  yPosition += 10;
+  
+  // Référence et Prix
+  pdf.setFontSize(10);
+  pdf.setFont("helvetica", "normal");
+  pdf.setTextColor(0, 0, 0);
+  
+  pdf.text("Référence à commander:", 20, yPosition);
+  pdf.setFont("helvetica", "bold");
+  pdf.text(reference, 80, yPosition);
+  
+  yPosition += 8;
+  
+  pdf.setFont("helvetica", "normal");
+  pdf.text("Prix public:", 20, yPosition);
+  pdf.setFont("helvetica", "bold");
+  pdf.setTextColor(54, 59, 199);
+  pdf.text(`${price} €`, 80, yPosition);
+  
+  yPosition += 8;
+  
+  // Prix à l'unité et quantité si applicable
+  if (unitPrice) {
+    pdf.setFont("helvetica", "normal");
+    pdf.setTextColor(0, 0, 0);
+    pdf.text(`Prix à l'unité (${quantity} produits):`, 20, yPosition);
+    pdf.setFont("helvetica", "bold");
+    pdf.text(`${unitPrice.toFixed(2)} €`, 80, yPosition);
+    
+    yPosition += 8;
+    
+    pdf.setFont("helvetica", "normal");
+    pdf.text("Quantité:", 20, yPosition);
+    pdf.setFont("helvetica", "bold");
+    pdf.text(`${quantity} produits`, 80, yPosition);
+    
+    yPosition += 8;
+  }
+  
+  // Délai de fabrication
+  pdf.setFont("helvetica", "normal");
+  pdf.text("Délai de fabrication:", 20, yPosition);
+  pdf.setFont("helvetica", "bold");
+  pdf.text("Environ 1 semaine", 80, yPosition);
+  
+  yPosition += 15;
+  
+  // Section Détails
+  pdf.setFontSize(14);
+  pdf.setFont("helvetica", "bold");
+  pdf.setTextColor(54, 59, 199);
+  pdf.text("Détails de la configuration", 20, yPosition);
+  
+  yPosition += 10;
+  
+  // Détails en deux colonnes
+  const details = [
+    ["Connecteur A", selectedOptions.connecteurA],
+    ["Connecteur B", selectedOptions.connecteurB],
+    ["Nombre de fibres", selectedOptions.nombreFibres],
+    ["Mode fibre", selectedOptions.modeFibre],
+    ["Type de câble", selectedOptions.typeCable],
+    ["Longueur", `${selectedOptions.longueur} m`],
+    ["Épanouissement", selectedOptions.epanouissement],
+    ["Type de test", selectedOptions.typeTest]
+  ];
+  
+  pdf.setFontSize(10);
+  pdf.setFont("helvetica", "normal");
+  pdf.setTextColor(0, 0, 0);
+  
+  details.forEach(([label, value], index) => {
+    const x = index % 2 === 0 ? 20 : 110;
+    const y = yPosition + Math.floor(index / 2) * 8;
+    
+    pdf.text(`${label}:`, x, y);
+    pdf.setFont("helvetica", "bold");
+    pdf.text(value, x + 40, y);
+    pdf.setFont("helvetica", "normal");
+  });
+  
+  yPosition += Math.ceil(details.length / 2) * 8 + 15;
+  
+  // Section Résumé
+  pdf.setFontSize(14);
+  pdf.setFont("helvetica", "bold");
+  pdf.setTextColor(54, 59, 199);
+  pdf.text("Résumé de la configuration", 20, yPosition);
+  
+  yPosition += 10;
+  
+  pdf.setFontSize(10);
+  pdf.setFont("helvetica", "normal");
+  pdf.setTextColor(0, 0, 0);
+  
+  const summary = `Trunck : ${selectedOptions.connecteurA}/${selectedOptions.connecteurB} ${selectedOptions.nombreFibres} Fibres ${selectedOptions.modeFibre} ${selectedOptions.typeCable} de ${selectedOptions.longueur}m avec test de ${selectedOptions.typeTest}`;
+  
+  // Diviser le texte en lignes si trop long
+  const lines = pdf.splitTextToSize(summary, 170);
+  lines.forEach(line => {
+    pdf.text(line, 20, yPosition);
+    yPosition += 5;
+  });
+  
+  // Pied de page
+  yPosition = 280;
+  pdf.setFontSize(8);
+  pdf.setTextColor(100, 100, 100);
+  pdf.text("Conditions de vente disponibles sur demande | SIRET: 521 756 502 00030", 20, yPosition);
+  
+  return pdf;
+};

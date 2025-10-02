@@ -4,7 +4,10 @@ import {
   validatePdfFile,
   escapeHtml,
 } from "../utils/compressPdf.js";
-import { isConfigurationComplete, isConfigurationAvailable } from "../utils/calculations.js";
+import {
+  isConfigurationComplete,
+  isConfigurationAvailable,
+} from "../utils/calculations.js";
 
 const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
   const availability = isConfigurationAvailable(selectedOptions);
@@ -72,7 +75,7 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
 
       setStatus("ok");
       setProgress("PDF envoyé avec succès !");
-      
+
       // Réinitialiser le formulaire après 2 secondes
       setTimeout(() => {
         setFormData({
@@ -146,8 +149,11 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
 
           <div className="contact-form-section">
             <h3>Demander un devis personnalisé</h3>
-            <p>Remplissez le formulaire ci-dessous pour nous envoyer votre configuration et recevoir un devis détaillé.</p>
-            
+            <p>
+              Remplissez le formulaire ci-dessous pour nous envoyer votre
+              configuration et recevoir un devis détaillé.
+            </p>
+
             {status === "ok" ? (
               <div className="success-message">
                 <div className="success-icon">✅</div>
@@ -168,7 +174,9 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
                       value={formData.nom}
                       onChange={handleInputChange}
                       required
-                      disabled={status === "sending" || status === "compressing"}
+                      disabled={
+                        status === "sending" || status === "compressing"
+                      }
                       placeholder="Votre nom"
                     />
                   </div>
@@ -184,7 +192,9 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
                       value={formData.prenom}
                       onChange={handleInputChange}
                       required
-                      disabled={status === "sending" || status === "compressing"}
+                      disabled={
+                        status === "sending" || status === "compressing"
+                      }
                       placeholder="Votre prénom"
                     />
                   </div>
@@ -218,7 +228,9 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
                       value={formData.telephone}
                       onChange={handleInputChange}
                       required
-                      disabled={status === "sending" || status === "compressing"}
+                      disabled={
+                        status === "sending" || status === "compressing"
+                      }
                       placeholder="06 12 34 56 78"
                     />
                   </div>
@@ -234,18 +246,24 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
                       value={formData.societe}
                       onChange={handleInputChange}
                       required
-                      disabled={status === "sending" || status === "compressing"}
+                      disabled={
+                        status === "sending" || status === "compressing"
+                      }
                       placeholder="Nom de votre société"
                     />
                   </div>
                 </div>
 
                 <div className="address-section">
-                  <h4>Adresse de livraison <span className="optional">(optionnel)</span></h4>
+                  <h4>
+                    Adresse de livraison{" "}
+                    <span className="optional">(optionnel)</span>
+                  </h4>
                   <small className="field-help">
-                    Indiquez votre adresse pour recevoir un devis avec frais de livraison
+                    Indiquez votre adresse pour recevoir un devis avec frais de
+                    livraison
                   </small>
-                  
+
                   <div className="form-group">
                     <label htmlFor="adresse">Adresse</label>
                     <input
@@ -254,7 +272,9 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
                       name="adresse"
                       value={formData.adresse}
                       onChange={handleInputChange}
-                      disabled={status === "sending" || status === "compressing"}
+                      disabled={
+                        status === "sending" || status === "compressing"
+                      }
                       placeholder="Numéro et nom de rue"
                     />
                   </div>
@@ -267,7 +287,9 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
                       name="complement"
                       value={formData.complement}
                       onChange={handleInputChange}
-                      disabled={status === "sending" || status === "compressing"}
+                      disabled={
+                        status === "sending" || status === "compressing"
+                      }
                       placeholder="Appartement, étage, bâtiment..."
                     />
                   </div>
@@ -281,7 +303,9 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
                         name="codePostal"
                         value={formData.codePostal}
                         onChange={handleInputChange}
-                        disabled={status === "sending" || status === "compressing"}
+                        disabled={
+                          status === "sending" || status === "compressing"
+                        }
                         placeholder="75001"
                         maxLength="5"
                       />
@@ -295,7 +319,9 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
                         name="ville"
                         value={formData.ville}
                         onChange={handleInputChange}
-                        disabled={status === "sending" || status === "compressing"}
+                        disabled={
+                          status === "sending" || status === "compressing"
+                        }
                         placeholder="Paris"
                       />
                     </div>
@@ -332,7 +358,12 @@ const ContactSection = ({ selectedOptions, onSendPdfClick }) => {
                 <div className="form-actions">
                   <button
                     type="submit"
-                    disabled={status === "sending" || status === "compressing" || !isConfigurationComplete(selectedOptions) || availability?.available === false}
+                    disabled={
+                      status === "sending" ||
+                      status === "compressing" ||
+                      !isConfigurationComplete(selectedOptions) ||
+                      availability?.available === false
+                    }
                     className="send-button"
                     aria-busy={status === "sending" || status === "compressing"}
                   >
