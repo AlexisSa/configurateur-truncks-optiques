@@ -476,9 +476,10 @@ export const generatePdfBlob = async (selectedOptions) => {
     const size = base64.length * 0.75; // Approximation de la taille en bytes
 
     // Vérifier la taille et compresser si nécessaire
-    if (size > 4_000_000) { // Si plus de 4MB
+    if (size > 4_000_000) {
+      // Si plus de 4MB
       console.warn("PDF trop volumineux, compression supplémentaire...");
-      
+
       // Régénérer avec une qualité encore plus faible
       const canvas2 = await html2canvas(pdfContent, {
         scale: 1.2, // Encore plus petit
@@ -498,13 +499,19 @@ export const generatePdfBlob = async (selectedOptions) => {
       const imgData2 = canvas2.toDataURL("image/jpeg", 0.6); // 60% de qualité
       const pdf2 = new jsPDF("p", "mm", "a4");
       pdf2.addImage(imgData2, "JPEG", 0, 0, 210, 297);
-      
+
       const pdfOutput2 = pdf2.output("datauristring");
       const base64Compressed = pdfOutput2.split(",")[1];
       const compressedSize = base64Compressed.length * 0.75;
-      
-      console.log(`Taille originale: ${Math.round(size / 1024 / 1024 * 100) / 100}MB, Taille compressée: ${Math.round(compressedSize / 1024 / 1024 * 100) / 100}MB`);
-      
+
+      console.log(
+        `Taille originale: ${
+          Math.round((size / 1024 / 1024) * 100) / 100
+        }MB, Taille compressée: ${
+          Math.round((compressedSize / 1024 / 1024) * 100) / 100
+        }MB`
+      );
+
       return {
         base64: base64Compressed,
         size: compressedSize,
