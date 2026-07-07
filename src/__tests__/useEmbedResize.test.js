@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import {
+  getPageHeight,
   isEmbedMode,
   sendEmbedHeight,
 } from "../hooks/useEmbedResize.js";

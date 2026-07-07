@@ -19,3 +19,10 @@ body {
   width: 100%;
   min-height: 100vh;
 }
+
+html.embed-mode,
+html.embed-mode body,
+html.embed-mode #root {
+  min-height: auto;
+  height: auto;
+}

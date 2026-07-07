@@ -48,6 +48,10 @@ body {
   min-height: 100vh;
 }
 
+html.embed-mode .app {
+  min-height: auto;
+}
+
 /* Layout principal */
 .app {
   min-height: 100vh;
