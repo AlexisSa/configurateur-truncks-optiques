@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import { useConfiguration } from "./hooks/useConfiguration.js";
+import { useEmbedResize } from "./hooks/useEmbedResize.js";
 import {
   Header,
   ConfigurationGrid,
@@ -14,6 +15,8 @@ import { generateReference, calculatePrice } from "./utils/calculations.js";
 
 function App() {
   const [showPresetModal, setShowPresetModal] = useState(false);
+
+  useEmbedResize();
 
   const {
     selectedOptions,
